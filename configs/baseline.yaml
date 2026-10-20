@@ -3,6 +3,7 @@ seed: 42
 device: cpu
 torch_threads: 1
 n_envs: 8
+vec_backend: sync
 n_steps: 256
 total_timesteps: 2000000
 learning_rate: 0.0003

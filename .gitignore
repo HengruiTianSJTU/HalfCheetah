@@ -231,5 +231,6 @@ raw_logs/
 credentials*
 *.pem
 *.key
+*.pkl
 .env.*
 .local/

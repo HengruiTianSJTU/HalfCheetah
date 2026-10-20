@@ -1,6 +1,7 @@
 """Train custom PPO with raw-return logging and independent frozen-normalizer evaluation."""
 import argparse
 import csv
+import functools
 import importlib.metadata
 import json
 import random
@@ -53,10 +54,12 @@ def main():
     p.add_argument('--learning-rate', type=float)
     p.add_argument('--clip-range', type=float)
     p.add_argument('--total-timesteps', type=int)
+    p.add_argument('--vec-backend', choices=['sync','async'])
+    p.add_argument('--device', choices=['cpu','cuda'])
     p.add_argument('--name')
     args = p.parse_args()
     c = yaml.safe_load(Path(args.config).read_text())
-    for key in ['seed', 'learning_rate', 'clip_range', 'total_timesteps']:
+    for key in ['seed', 'learning_rate', 'clip_range', 'total_timesteps','vec_backend','device']:
         if getattr(args, key) is not None:
             c[key] = getattr(args, key)
     name = args.name or f"hc_lr{c['learning_rate']:g}_clip{c['clip_range']:g}_seed{c['seed']}"
@@ -76,8 +79,11 @@ def main():
     device = torch.device(c['device'])
     model = ActorCritic().to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=c['learning_rate'], eps=1e-5)
-    envs = [gym.make(c['environment']) for _ in range(c['n_envs'])]
-    obs = np.array([env.reset(seed=c['seed'] + i)[0] for i, env in enumerate(envs)])
+    # Gymnasium supplies transport only; PPO and all target/update math are ours.
+    asynchronous = c.get('vec_backend','sync')=='async'
+    env_class = gym.vector.AsyncVectorEnv if asynchronous else gym.vector.SyncVectorEnv
+    envs = env_class([functools.partial(gym.make,c['environment']) for _ in range(c['n_envs'])],autoreset_mode=gym.vector.AutoresetMode.DISABLED,**({'context':'spawn'} if asynchronous else {}))
+    obs, _ = envs.reset(seed=[c['seed']+i for i in range(c['n_envs'])])
     obs_rms, ret_rms = RunningMeanStd((17,)), RunningMeanStd()
     obs_rms.update(obs)
     discounted = np.zeros(c['n_envs'])
@@ -119,11 +125,8 @@ def main():
                     action, log_prob, _, value = model.policy(torch.as_tensor(normalized, device=device))
                 raw_actions = action.cpu().numpy()
                 actions[t], log_probs[t], values[t] = raw_actions, log_prob.cpu().numpy(), value.cpu().numpy()
-                transitions = [env.step(np.clip(a, -1, 1)) for env,a in zip(envs,raw_actions)]
-                next_obs = np.array([x[0] for x in transitions])
-                raw_reward = np.array([x[1] for x in transitions])
-                terminated = np.array([x[2] for x in transitions])
-                done = np.array([x[2] or x[3] for x in transitions])
+                next_obs,raw_reward,terminated,truncated,_ = envs.step(np.clip(raw_actions,-1,1))
+                done = terminated | truncated
                 if not np.isfinite(next_obs).all() or not np.isfinite(raw_reward).all():
                     raise FloatingPointError('Non-finite environment transition')
                 # Reward scaling uses discounted-return variance; raw rewards remain in logs.
@@ -139,7 +142,8 @@ def main():
                     episode_writer.writerow([steps, episode_returns[i], episode_lengths[i]])
                     recent.append(episode_returns[i]); recent = recent[-100:]
                     episode_returns[i] = 0; episode_lengths[i] = 0; discounted[i] = 0
-                    next_obs[i] = envs[i].reset()[0]
+                if np.any(done):
+                    next_obs,_ = envs.reset(options={'reset_mask':done})
                 obs = next_obs
                 obs_rms.update(obs)
             advantages, returns = gae(rewards, values, next_values, ends, c['gamma'], c['gae_lambda'])
@@ -178,8 +182,7 @@ def main():
         raise
     finally:
         (out/'metadata.json').write_text(json.dumps(metadata,indent=2))
-        for env in envs:
-            env.close()
+        envs.close()
         for f in [train_file,eval_file,episode_file]:
             f.close()
 

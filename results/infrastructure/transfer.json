@@ -1,0 +1,9 @@
+{
+  "bytes": 8388608,
+  "upload_seconds": 9.543506376445293,
+  "download_seconds": 12.99875844269991,
+  "upload_mib_s": 0.8382663231351861,
+  "download_mib_s": 0.6154433929413307,
+  "verified": true,
+  "route": "existing SOCKS5 proxy to AutoDL SSH"
+}

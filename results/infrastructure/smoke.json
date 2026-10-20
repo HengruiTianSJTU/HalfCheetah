@@ -1,0 +1,9 @@
+{
+  "seed": 42,
+  "steps": 1200,
+  "observation": "Box(-inf, inf, (17,), float64)",
+  "action": "Box(-1.0, 1.0, (6,), float32)",
+  "terminated": 0,
+  "truncated": 1,
+  "cumulative_reward": -418.2323227483986
+}
