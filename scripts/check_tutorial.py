@@ -12,10 +12,10 @@ with sync_playwright() as p:
     page.wait_for_selector('#experimentChart svg')
     assert page.locator('#summaryTable tr').count()>=5
     before=page.locator('#objective').inner_html()
-    page.locator('#epsilon').fill('0.35');page.locator('#epsilon').dispatch_event('input')
+    page.locator('#epsilon').evaluate("el=>{el.value='0.35';el.dispatchEvent(new Event('input',{bubbles:true}))}")
     assert page.locator('#epsilonValue').text_content()=='0.35'
     assert before!=page.locator('#objective').inner_html()
-    page.locator('#advantage').fill('-1');page.locator('#advantage').dispatch_event('input')
+    page.locator('#advantage').evaluate("el=>{el.value='-1';el.dispatchEvent(new Event('input',{bubbles:true}))}")
     assert page.locator('#advantageValue').text_content()=='-1.0'
     for view in ['clip','seed','baseline','all','lr']:
         page.locator('#view').select_option(view)

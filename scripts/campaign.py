@@ -1,13 +1,12 @@
 """Durable campaign driver: finish benchmarking, run the matrix and verify deliverables."""
 import argparse
 import json
-import os
-import select
 import subprocess
 import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+import psutil
 
 
 def main():
@@ -25,9 +24,8 @@ def main():
         if a.wait_benchmark_pid:
             state['phase']='waiting for reference benchmark';save()
             try:
-                fd=os.pidfd_open(a.wait_benchmark_pid)
-                select.select([fd],[],[]);os.close(fd)
-            except ProcessLookupError:
+                psutil.Process(a.wait_benchmark_pid).wait()
+            except psutil.NoSuchProcess:
                 pass
         run('scripts/run_benchmarks.py')
         pilots=json.loads(Path('results/custom_benchmark.json').read_text())
