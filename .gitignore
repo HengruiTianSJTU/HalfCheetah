@@ -218,3 +218,18 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Experiment artifacts and credentials
+*.pt
+*.pth
+*.zip
+*.mp4
+*.mkv
+*.tfevents.*
+checkpoints/
+raw_logs/
+credentials*
+*.pem
+*.key
+.env.*
+.local/
