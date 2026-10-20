@@ -84,6 +84,9 @@ def main():
     table=ax.table(cellText=cells,colLabels=['Learning rate','Clip','Seeds','Final mean','Seed SD','Eval AUC'],loc='center',cellLoc='center');table.auto_set_font_size(False);table.set_fontsize(10);table.scale(1,1.6)
     ax.set_title('Final validation return by configuration (raw reward)',pad=15);fig.tight_layout();fig.savefig(figures/'summary_table.png');plt.close(fig)
     payload=dict(runs=runs,summary=rows,groups=groups,total_training_wall_clock=sum(r['wall_clock'] or 0 for r in rows))
+    benchmark_path=Path('results/benchmark_summary.json')
+    if benchmark_path.exists():
+        payload['benchmarks']=json.loads(benchmark_path.read_text())
     final_path=Path('results/final_evaluation_summary.json')
     if final_path.exists():
         payload['final_evaluation']=json.loads(final_path.read_text())

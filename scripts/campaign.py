@@ -12,7 +12,7 @@ import psutil
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--wait-benchmark-pid',type=int)
-    p.add_argument('--workers',type=int,default=6)
+    p.add_argument('--workers',type=int,default=8)
     a=p.parse_args()
     started=time.perf_counter();state=dict(started=datetime.now(timezone.utc).isoformat(),status='running',workers=a.workers)
     def save():
@@ -28,11 +28,12 @@ def main():
             except psutil.NoSuchProcess:
                 pass
         run('scripts/run_benchmarks.py')
+        run('scripts/benchmark_report.py')
         pilots=json.loads(Path('results/custom_benchmark.json').read_text())
         best=max(pilots,key=lambda r:r['steps_per_cpu_second'])
         if best['vec_backend']!='sync':
             raise RuntimeError('Measured CPU efficiency contradicts planned sync configuration; update saved config before formal runs')
-        decision=dict(choice='CPU, 8 synchronous environments, 6 independent concurrent jobs',reason='Sync has higher transitions per total CPU-second despite async winning single-run wall time; parallel independent experiments exploit the 8-vCPU quota without 48 environment workers.',workers=a.workers,pilots=pilots,formal_timesteps=2000000,reference='results/benchmark/*/summary.json')
+        decision=dict(choice=f'CPU, 8 synchronous environments, {a.workers} independent concurrent jobs',reason='Sync has higher transitions per total CPU-second despite async winning single-run wall time. Each job measured approximately one CPU core; eight one-thread independent jobs fit the 8-vCPU quota without 64 subprocess environment workers.',workers=a.workers,pilots=pilots,formal_timesteps=2000000,reference='results/benchmark/*/summary.json')
         Path('results/compute_decision.json').write_text(json.dumps(decision,indent=2))
         run('scripts/run_experiments.py','--workers',str(a.workers),'--timesteps','2000000')
         run('scripts/finalize.py')
