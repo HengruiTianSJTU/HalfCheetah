@@ -79,10 +79,18 @@ def main():
     for lr,clip in sorted(set((r['learning_rate'],r['clip_range']) for r in rows)):
         group=[r for r in rows if r['learning_rate']==lr and r['clip_range']==clip]
         groups.append(dict(learning_rate=lr,clip_range=clip,n_seeds=len(group),final_mean=float(np.mean([r['final_eval_mean'] for r in group])),seed_sd=float(np.std([r['final_eval_mean'] for r in group],ddof=1)) if len(group)>1 else None,auc_mean=float(np.mean([r['evaluation_auc'] for r in group])),completed=all(r['status']=='completed' for r in group)))
+    fig,ax=plt.subplots(figsize=(10,1.4+.5*len(groups)));ax.axis('off')
+    cells=[[f"{g['learning_rate']:g}",str(g['clip_range']),str(g['n_seeds']),f"{g['final_mean']:.1f}",f"{g['seed_sd']:.1f}" if g['seed_sd'] is not None else 'N/A',f"{g['auc_mean']:.1f}"] for g in groups]
+    table=ax.table(cellText=cells,colLabels=['Learning rate','Clip','Seeds','Final mean','Seed SD','Eval AUC'],loc='center',cellLoc='center');table.auto_set_font_size(False);table.set_fontsize(10);table.scale(1,1.6)
+    ax.set_title('Final validation return by configuration (raw reward)',pad=15);fig.tight_layout();fig.savefig(figures/'summary_table.png');plt.close(fig)
     payload=dict(runs=runs,summary=rows,groups=groups,total_training_wall_clock=sum(r['wall_clock'] or 0 for r in rows))
     final_path=Path('results/final_evaluation_summary.json')
     if final_path.exists():
         payload['final_evaluation']=json.loads(final_path.read_text())
+        final_rows=read_csv(Path('results/final_evaluation.csv'))
+        plt.bar([int(r['seed']) for r in final_rows],[r['episode_return'] for r in final_rows],color='#398f83')
+        plt.axhline(payload['final_evaluation']['mean'],color='#b45728',linestyle='--',label='20-episode mean')
+        plt.xlabel('Held-out evaluation seed');plt.ylabel('Raw episodic return');plt.title('Final policy: independent evaluation episodes');plt.ticklabel_format(useOffset=False,style='plain',axis='x');plt.legend();plt.tight_layout();plt.savefig(figures/'final_evaluation.png');plt.close()
     # Training downsampling only affects tutorial size, never figures or summary calculation.
     for run in runs:
         stride=max(1,len(run['train'])//250)
@@ -98,7 +106,7 @@ def main():
     template=Path('tutorial/template.html').read_text()
     html=template.replace('__EXPERIMENT_DATA__',json.dumps(payload,allow_nan=False))
     Path('tutorial/index.html').write_text(html)
-    print(f'Generated 6 figures, summary CSV/JSON and offline tutorial from {len(runs)} real runs')
+    print(f'Generated figures, summary CSV/JSON and offline tutorial from {len(runs)} real runs')
 
 
 if __name__=='__main__':
