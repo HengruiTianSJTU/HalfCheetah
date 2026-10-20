@@ -79,6 +79,8 @@ Technical materials: [results chapter](docs/RESULTS.md), [presentation and defen
 
 The [experiment protocol](docs/EXPERIMENT_PROTOCOL.md) defines budgets, seed aggregation, held-out evaluation and model selection. `python scripts/inspect_environments.py` records installed HalfCheetah/Hopper definitions. After final results are committed, `python scripts/fresh_qa.py` checks a new checkout and a new project dependency venv while reusing the supplied base PyTorch/CUDA.
 
+Final validation: the [QA record](docs/QA.md) documents a fresh checkout/new project-dependency environment, all six tests, EGL smoke, training/evaluation, byte-identical plot/Tutorial regeneration, offline browser controls and artifact audits.
+
 ## Artifact policy
 
 Commit source, configs, compact metrics, final figures and documentation. Checkpoints, videos, raw TensorBoard logs, virtual environments and credentials are excluded. The complete local delivery includes `results/videos/halfcheetah_running.mp4` and `results/hc_lr0.0003_clip0.2_seed45/checkpoint.pt`; SHA-256 identifiers are recorded in `results/final_evaluation_summary.json`. GitHub contains the small final frame/poster, metrics and standalone Tutorial, but excludes model/video binaries. A fresh clone can inspect all curves offline immediately; to play the final video, copy the local delivery's `results/videos/` beside the cloned results, or reproduce training and run `finalize.py`. No public binary download is currently hosted. Do not store SSH credentials in this repository.

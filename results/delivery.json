@@ -1,0 +1,25 @@
+{
+  "status": "complete",
+  "timestamp": "2026-10-20T12:17:00.106359+00:00",
+  "verified_artifacts_commit": "f50775d3dd2770bdf63a5df6125d95586ddba435",
+  "formal_experiments": 24,
+  "total_transitions": 48021504,
+  "normal_groups_training_seeds": [
+    5,
+    5,
+    5,
+    5,
+    3
+  ],
+  "final_evaluation_episodes": 20,
+  "training_matrix_wall_clock_seconds": 11286.524695038795,
+  "training_job_wall_clock_sum_hours": 24.864491813681607,
+  "qa": [
+    "fresh_environment.json",
+    "regeneration.json",
+    "tutorial.json",
+    "artifacts.json"
+  ],
+  "resolved_issue": "Initial campaign artifact QA stopped at CRLF CSV whitespace; normalized CSV line endings without changing values, then reran full QA successfully.",
+  "binary_delivery": "Checkpoints and MP4 videos are retained locally and on AutoDL, excluded from Git."
+}

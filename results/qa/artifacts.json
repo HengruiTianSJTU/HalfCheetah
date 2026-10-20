@@ -1,0 +1,13 @@
+{
+  "formal_normal_experiments": 23,
+  "failure_experiments": 1,
+  "matched_training_budgets": true,
+  "fixed_seed_100k_prefix_reproduced": true,
+  "raw_metric_traceability": true,
+  "source_hashes_match": true,
+  "independent_evaluation": true,
+  "valid_final_video": true,
+  "figures": true,
+  "tutorial_embedded_data": true,
+  "tracked_secret_and_size_audit": true
+}

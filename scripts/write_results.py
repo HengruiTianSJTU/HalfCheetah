@@ -8,6 +8,8 @@ def main():
     data=json.loads(Path('results/summary.json').read_text())
     assert all(r['status']=='completed' for r in data['summary'])
     final=data['final_evaluation'];groups=data['groups']
+    with Path('results/final_evaluation.csv').open() as f:
+        test_returns=[float(r['episode_return']) for r in csv.DictReader(f)]
     baseline=next(g for g in groups if g['learning_rate']==3e-4 and g['clip_range']==.2)
     lr_groups=[g for g in groups if g['clip_range']==.2 and g['learning_rate']<=.001]
     clip_groups=[g for g in groups if g['learning_rate']==3e-4]
@@ -83,6 +85,7 @@ Learning-rate 对照中，观察到的最高末次组均值对应 **lr={best_lr[
 先取 baseline 中位数模型，在独立 selection seeds 11000..11019 上验证稳定性；要求每回合回报 >1000 且 episode CV ≤0.30。若不满足，在全部正常配置候选中按同样规则筛选，再按第10百分位选模型。该规则在最终 test 前声明。此次模式为 `{final['selection_mode']}`，选定模型 `{final['experiment_name']}`；随后在未用于训练/validation 的 seeds 30000..30019 进行 20 回合 test。完整选择记录见 `model_selection.json`。
 
 - 原始累计回报：**{final['mean']:.1f} ± {final['std']:.1f}**（均值 ± episode SD）。
+- 最终 test 回报范围：{min(test_returns):.1f}–{max(test_returns):.1f}；其中 {sum(v<=1000 for v in test_returns)}/20 回合不超过工程选择阈值1000。选择阈值只作用于独立 selection 集，不能据 test 结果改选；该回合仍如实保留。
 - 平均前向速度：**{final['mean_forward_velocity_m_s']:.3f} ± {final['std_forward_velocity_m_s']:.3f} m/s**。
 - 平均 episode length：{final['mean_episode_length']:.0f}。1000 步是时间上限，本身不构成健康或自然步态证明。
 - `final_motion.csv` 独立验证位移、速度及 forward/control reward 分项与原始回报一致。

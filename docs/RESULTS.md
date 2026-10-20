@@ -52,6 +52,7 @@ Learning-rate 对照中，观察到的最高末次组均值对应 **lr=0.0003**�
 先取 baseline 中位数模型，在独立 selection seeds 11000..11019 上验证稳定性；要求每回合回报 >1000 且 episode CV ≤0.30。若不满足，在全部正常配置候选中按同样规则筛选，再按第10百分位选模型。该规则在最终 test 前声明。此次模式为 `median_baseline_after_stability_validation`，选定模型 `hc_lr0.0003_clip0.2_seed45`；随后在未用于训练/validation 的 seeds 30000..30019 进行 20 回合 test。完整选择记录见 `model_selection.json`。
 
 - 原始累计回报：**3614.6 ± 692.5**（均值 ± episode SD）。
+- 最终 test 回报范围：985.4–3957.3；其中 1/20 回合不超过工程选择阈值1000。选择阈值只作用于独立 selection 集，不能据 test 结果改选；该回合仍如实保留。
 - 平均前向速度：**3.938 ± 0.687 m/s**。
 - 平均 episode length：1000。1000 步是时间上限，本身不构成健康或自然步态证明。
 - `final_motion.csv` 独立验证位移、速度及 forward/control reward 分项与原始回报一致。

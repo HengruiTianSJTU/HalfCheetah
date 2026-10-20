@@ -1,0 +1,12 @@
+{
+  "results/summary.json": true,
+  "tutorial/index.html": true,
+  "results/figures/baseline_training.png": true,
+  "results/figures/evaluation.png": true,
+  "results/figures/learning_rate.png": true,
+  "results/figures/clip_range.png": true,
+  "results/figures/seed_variability.png": true,
+  "results/figures/failure_vs_success.png": true,
+  "results/figures/summary_table.png": true,
+  "results/figures/final_evaluation.png": true
+}
