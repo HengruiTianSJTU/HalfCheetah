@@ -8,6 +8,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 report = {"timestamp": datetime.now(timezone.utc).isoformat(), "python": platform.python_version(), "platform": platform.platform()}
+report['cgroup'] = {}
+for name in ['cpu.max','memory.max','cpu.stat']:
+    path=Path('/sys/fs/cgroup')/name
+    if path.exists():
+        report['cgroup'][name]=path.read_text().strip()
 for package in ["torch", "gymnasium", "mujoco", "stable-baselines3", "numpy"]:
     try:
         report[package] = importlib.metadata.version(package)

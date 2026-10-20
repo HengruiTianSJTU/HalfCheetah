@@ -234,3 +234,4 @@ credentials*
 *.pkl
 .env.*
 .local/
+results/qa_*/

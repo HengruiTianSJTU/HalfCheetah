@@ -72,7 +72,7 @@ def main():
     rows=[]
     for run in runs:
         ev=run['evaluation'];xs=np.array([e['timesteps'] for e in ev]);ys=np.array([e['mean'] for e in ev])
-        rows.append(dict(experiment_name=run['name'],seed=run['config']['seed'],learning_rate=run['config']['learning_rate'],clip_range=run['config']['clip_range'],timesteps=run['final']['timesteps'],final_eval_mean=run['final']['mean'],final_episode_sd=run['final']['std'],evaluation_auc=float(np.trapezoid(ys,xs)/(xs[-1]-xs[0])) if xs[-1]>xs[0] else 0,wall_clock=run['metadata'].get('wall_clock_time'),status=run['metadata'].get('status','running')))
+        rows.append(dict(experiment_name=run['name'],seed=run['config']['seed'],learning_rate=run['config']['learning_rate'],clip_range=run['config']['clip_range'],timesteps=run['final']['timesteps'],final_eval_mean=run['final']['mean'],final_episode_sd=run['final']['std'],evaluation_auc=float(np.trapezoid(ys,xs)/(xs[-1]-xs[0])) if xs[-1]>xs[0] else 0,wall_clock=run['metadata'].get('wall_clock_time',run['train'][-1]['wall_clock']),status=run['metadata'].get('status','running')))
     with Path('results/summary.csv').open('w',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)
     groups=[]

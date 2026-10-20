@@ -1,0 +1,110 @@
+{
+  "timestamp": "2026-10-20T08:00:16.180504+00:00",
+  "workers": 8,
+  "total_timesteps": 2000000,
+  "matrix": [
+    {
+      "learning_rate": 0.0001,
+      "clip_range": 0.2,
+      "seed": 42
+    },
+    {
+      "learning_rate": 0.0001,
+      "clip_range": 0.2,
+      "seed": 43
+    },
+    {
+      "learning_rate": 0.0001,
+      "clip_range": 0.2,
+      "seed": 44
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.2,
+      "seed": 42
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.2,
+      "seed": 43
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.2,
+      "seed": 44
+    },
+    {
+      "learning_rate": 0.001,
+      "clip_range": 0.2,
+      "seed": 42
+    },
+    {
+      "learning_rate": 0.001,
+      "clip_range": 0.2,
+      "seed": 43
+    },
+    {
+      "learning_rate": 0.001,
+      "clip_range": 0.2,
+      "seed": 44
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.1,
+      "seed": 42
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.1,
+      "seed": 43
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.1,
+      "seed": 44
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.3,
+      "seed": 42
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.3,
+      "seed": 43
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.3,
+      "seed": 44
+    },
+    {
+      "learning_rate": 0.03,
+      "clip_range": 0.2,
+      "seed": 42
+    }
+  ],
+  "baseline_selection": "Choose baseline seed whose final validation mean is closest to median; do not select an individual stochastic episode.",
+  "final_test_seeds": [
+    20000,
+    20001,
+    20002,
+    20003,
+    20004,
+    20005,
+    20006,
+    20007,
+    20008,
+    20009,
+    20010,
+    20011,
+    20012,
+    20013,
+    20014,
+    20015,
+    20016,
+    20017,
+    20018,
+    20019
+  ]
+}

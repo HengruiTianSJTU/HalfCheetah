@@ -1,0 +1,33 @@
+{
+  "device": "cpu",
+  "n_envs": 1,
+  "vec": "dummy",
+  "seed": 42,
+  "requested_timesteps": 100000,
+  "actual_timesteps": 100352,
+  "wall_clock": 226.79805474728346,
+  "fps": 442.47293087156424,
+  "environment_only_fps": 1246.2785762902465,
+  "training_return_last20": 70.12598360000001,
+  "evaluation_returns": [
+    880.016253,
+    999.527221,
+    818.952479,
+    816.159512,
+    858.037566
+  ],
+  "evaluation_lengths": [
+    1000,
+    1000,
+    1000,
+    1000,
+    1000
+  ],
+  "resource_mean": {
+    "cpu_percent": 99.60045662100457,
+    "system_cpu_percent": 7.181735159817352,
+    "rss_mb": 559.6613869863014,
+    "gpu_percent": 0.0,
+    "gpu_memory_mb": 2.9726027397260273
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "choice": "CPU, 8 synchronous environments, 8 independent concurrent jobs",
+  "reason": "Sync has higher transitions per total CPU-second despite async winning single-run wall time. Each job measured approximately one CPU core; eight one-thread independent jobs fit the 8-vCPU quota without 64 subprocess environment workers.",
+  "workers": 8,
+  "pilots": [
+    {
+      "vec_backend": "sync",
+      "wall_clock": 173.38588505983353,
+      "total_cpu_seconds": 173.066238,
+      "cpu_equivalent": 0.998156441282846,
+      "training_fps": 591.7097790469589,
+      "end_to_end_fps": 578.7783703694776,
+      "steps_per_cpu_second": 579.8473530117411
+    },
+    {
+      "vec_backend": "async",
+      "wall_clock": 116.1910150423646,
+      "total_cpu_seconds": 266.205418,
+      "cpu_equivalent": 2.2911015787489113,
+      "training_fps": 910.968980220415,
+      "end_to_end_fps": 863.681240441961,
+      "steps_per_cpu_second": 376.9720419439397
+    }
+  ],
+  "formal_timesteps": 2000000,
+  "reference": "results/benchmark/*/summary.json"
+}

@@ -33,7 +33,7 @@ def main():
     with Path('results/final_evaluation.csv').open() as f:
         rows=list(csv.DictReader(f))
     returns=[float(r['episode_return']) for r in rows]
-    summary=dict(experiment_name=directory.name,selection_rule='Median final-validation baseline seed; fixed independent test seeds 20000..20019',validation_mean=validation_mean,episodes=len(rows),mean=float(np.mean(returns)),std=float(np.std(returns,ddof=1)),mean_episode_length=float(np.mean([int(r['episode_length']) for r in rows])),checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest(),video_seed=20000)
+    summary=dict(experiment_name=directory.name,selection_rule='Median final-validation baseline seed; fixed independent test seeds 20000..20019',validation_mean=validation_mean,episodes=len(rows),mean=float(np.mean(returns)),std=float(np.std(returns,ddof=1)),mean_episode_length=float(np.mean([int(r['episode_length']) for r in rows])),checkpoint_sha256=hashlib.sha256(checkpoint.read_bytes()).hexdigest(),video_seed=20000,video_sha256=hashlib.sha256(Path('results/videos/halfcheetah_running.mp4').read_bytes()).hexdigest())
     Path('results/final_evaluation_summary.json').write_text(json.dumps(summary,indent=2))
     subprocess.run([sys.executable,'scripts/report.py'],check=True)
     print(json.dumps(summary,indent=2))

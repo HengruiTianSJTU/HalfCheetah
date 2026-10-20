@@ -1,0 +1,74 @@
+{
+  "gymnasium": "1.2.1",
+  "mujoco": "3.3.7",
+  "environments": [
+    {
+      "environment": "HalfCheetah-v5",
+      "observation_dim": 17,
+      "action_dim": 6,
+      "action_low": [
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "action_high": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "nq": 9,
+      "nv": 9,
+      "nu": 6,
+      "dt": 0.05,
+      "frame_skip": 5,
+      "max_episode_steps": 1000,
+      "settings": {
+        "_forward_reward_weight": "1.0",
+        "_ctrl_cost_weight": "0.1",
+        "_healthy_reward": "None",
+        "_terminate_when_unhealthy": "None",
+        "_healthy_state_range": "None",
+        "_healthy_z_range": "None",
+        "_healthy_angle_range": "None",
+        "_exclude_current_positions_from_observation": "True"
+      }
+    },
+    {
+      "environment": "Hopper-v5",
+      "observation_dim": 11,
+      "action_dim": 3,
+      "action_low": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "action_high": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "nq": 6,
+      "nv": 6,
+      "nu": 3,
+      "dt": 0.008,
+      "frame_skip": 4,
+      "max_episode_steps": 1000,
+      "settings": {
+        "_forward_reward_weight": "1.0",
+        "_ctrl_cost_weight": "0.001",
+        "_healthy_reward": "1.0",
+        "_terminate_when_unhealthy": "True",
+        "_healthy_state_range": "(-100.0, 100.0)",
+        "_healthy_z_range": "(0.7, inf)",
+        "_healthy_angle_range": "(-0.2, 0.2)",
+        "_exclude_current_positions_from_observation": "True"
+      }
+    }
+  ]
+}

@@ -11,6 +11,8 @@
 
 Hopper 是单腿平衡与跳跃，HalfCheetah 需要协调两腿的更多关节。Hopper 维度较低，但摔倒会使有效轨迹缩短、探索面临生存约束，因此不能仅按维度断言训练更容易。HalfCheetah 能获得更长的探索轨迹，也可能学到非自然但高回报的动作；最终需要视频观察。这里没有完成 Hopper 训练，难度差异是机制分析，不是本项目的实测排名。
 
+Hopper 默认健康高度下界 0.7、躯干角度范围 (-0.2,0.2)，并有健康奖励；HalfCheetah 没有此健康奖励。两者的模拟步长也不同：0.008 秒对 0.05 秒，所以 1000 步的物理时间不同，奖励不能直接横比。`scripts/inspect_environments.py` 从实际安装的两个环境记录维度、dt 和默认参数，输出 `results/infrastructure/environments.json`，不需要训练 Hopper。
+
 可靠定义与参数见 [Gymnasium HalfCheetah 文档](https://gymnasium.farama.org/environments/mujoco/half_cheetah/) 和 [Gymnasium Hopper 文档](https://gymnasium.farama.org/environments/mujoco/hopper/)。实际安装版本会由 diagnostics 和实验 metadata 记录。
 
 ## 为什么与《智能无线组网》相关

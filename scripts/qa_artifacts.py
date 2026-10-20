@@ -30,6 +30,8 @@ def main():
         assert m['seed']==c['seed'] and m['total_timesteps']==c['total_timesteps']
         for file,sha in m['source_sha256'].items():
             assert hashlib.sha256(Path(file).read_bytes()).hexdigest()==sha,(directory,file)
+            committed=subprocess.check_output(['git','show',f"{m['git_commit']}:{file}"])
+            assert hashlib.sha256(committed).hexdigest()==sha,(directory,file,'recorded Git revision does not reproduce source')
         metrics=rows(directory/'metrics.csv')
         assert metrics and all(float(r['fps'])>0 for r in metrics)
         for row in metrics:
@@ -58,6 +60,10 @@ def main():
     assert summary['mean']>1000,'Selected policy has not reached the declared forward-motion validation target'
     checkpoint=Path('results')/summary['experiment_name']/'checkpoint.pt'
     assert hashlib.sha256(checkpoint.read_bytes()).hexdigest()==summary['checkpoint_sha256']
+    assert hashlib.sha256(Path('results/videos/halfcheetah_running.mp4').read_bytes()).hexdigest()==summary['video_sha256']
+    video_rows=rows(Path('results/video_evaluation.csv'))
+    assert len(video_rows)==1 and int(video_rows[0]['seed'])==20000
+    np.testing.assert_allclose(float(video_rows[0]['episode_return']),float(final[0]['episode_return']))
     probe=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','stream=codec_name,nb_frames:format=duration','-of','json','results/videos/halfcheetah_running.mp4'],text=True))
     assert int(probe['streams'][0]['nb_frames'])==1000
     assert probe['streams'][0]['codec_name']=='h264'
