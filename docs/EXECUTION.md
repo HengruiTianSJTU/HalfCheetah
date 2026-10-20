@@ -14,4 +14,6 @@ Initial source: main at 888c6a2. Repository contained only a Python .gitignore; 
 
 Every formal run must record config, Git revision and dirty flag, UTC timestamp, seed, dependency versions, device, environment parameters, elapsed time and separate training/evaluation metrics. Never infer evaluation return from training reward. Preserve failed runs and report variance rather than a selected lucky episode.
 
-Current blocker: direct TCP connection to the supplied AutoDL endpoint timed out before authentication. No remote diagnostics, transfer test or training has been performed.
+Network: direct TCP timed out, but the jump host's existing SOCKS5 proxy successfully connected and authenticated AutoDL. Use SSH ProxyCommand, never store the SSH password. The PJLab worker wrapper and its compute resources are not used. An 8MiB incompressible round trip passed a byte-for-byte check (upload 0.84MiB/s; download 0.62MiB/s). This is adequate for code/metrics synchronization.
+
+AutoDL reports Python 3.12.3, PyTorch 2.5.1+cu124, an idle Tesla T4 16GiB, cgroup CPU quota 8 and RAM quota 56GiB. Host-level lscpu/free show larger shared hardware; use container quotas for planning.

@@ -65,7 +65,9 @@ def main():
     (out / 'config.yaml').write_text(yaml.safe_dump(c))
     def git(*argv):
         return subprocess.run(['git', *argv], capture_output=True, text=True).stdout.strip()
-    metadata = dict(experiment_name=name, git_commit=git('rev-parse', 'HEAD'), git_dirty=bool(git('status', '--porcelain')), timestamp=datetime.now(timezone.utc).isoformat(), python=__import__('platform').python_version(), versions={x: importlib.metadata.version(x) for x in ['torch', 'gymnasium', 'mujoco', 'numpy', 'stable-baselines3']}, **c)
+    import hashlib
+    source_hashes = {str(f): hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(Path('src').rglob('*.py'))}
+    metadata = dict(experiment_name=name, git_commit=git('rev-parse', 'HEAD'), git_dirty=bool(git('status', '--porcelain', '--untracked-files=no')), source_sha256=source_hashes, timestamp=datetime.now(timezone.utc).isoformat(), python=__import__('platform').python_version(), versions={x: importlib.metadata.version(x) for x in ['torch', 'gymnasium', 'mujoco', 'numpy', 'stable-baselines3']}, **c)
     (out / 'metadata.json').write_text(json.dumps(metadata, indent=2))
     random.seed(c['seed']); np.random.seed(c['seed']); torch.manual_seed(c['seed'])
     torch.set_num_threads(c['torch_threads'])
