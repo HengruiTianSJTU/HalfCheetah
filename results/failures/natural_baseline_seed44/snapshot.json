@@ -1,0 +1,12 @@
+{
+  "source_experiment": "hc_lr0.0003_clip0.2_seed44",
+  "timesteps": 800768,
+  "captured_at": "2026-10-20T08:26:54.306807+00:00",
+  "evaluation_mean": -245.37254039265162,
+  "evaluation_std": 3.814923126898115,
+  "evaluation_episodes": 5,
+  "training_return_at_capture": 1801.8931359342469,
+  "source_final_validation_mean": null,
+  "checkpoint_sha256": "cd6620014a86d2b26215876b72a6117a5c9027efd4d53805cb891429f8965432",
+  "purpose": "Observed transient deterministic-policy collapse. The original run continues; this is a diagnostic checkpoint, not a separately trained full-budget experiment."
+}

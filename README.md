@@ -39,21 +39,34 @@ See [all eight measured cases](results/benchmark_summary.csv) for CPU/GPU utiliz
 ```bash
 python -m pytest -q
 python -m halfcheetah.train --config configs/qa.yaml --name qa_pipeline
-python -m halfcheetah.train --config configs/baseline.yaml
-python scripts/evaluate.py results/hc_lr0.0003_clip0.2_seed42/checkpoint.pt --episodes 20
+python -m halfcheetah.train --config configs/baseline.yaml --name reproduce_baseline_seed42
+python scripts/evaluate.py results/reproduce_baseline_seed42/checkpoint.pt --episodes 20
+```
+
+Formal runs refuse to overwrite existing directories. A fresh clone already contains reference metrics and completed metadata, so run the full matrix in a code-only workspace; otherwise resumable orchestration will correctly skip those reference directories, which do not include checkpoints:
+
+```bash
+python scripts/prepare_reproduction.py
+cd .local/reproduction
+python -m pip install --no-deps -e .
+python scripts/diagnostics.py
+python scripts/smoke.py --video
+python scripts/run_benchmarks.py
+python scripts/benchmark_report.py
+python scripts/benchmark_custom.py
 python scripts/run_experiments.py --workers 8 --timesteps 2000000
 python scripts/finalize.py
 ```
 
-Formal runs refuse to overwrite existing directories. The matrix uses learning rates 1e-4/3e-4/1e-3, clip ranges 0.1/0.2/0.3 with the baseline shared between the two ablations, seeds 42/43/44, plus an aggressive 0.03 learning-rate run: 16 unique experiments. Pilot benchmarking determines the final compute settings and budget; the actual saved configs are authoritative. Use tmux for long commands on AutoDL.
+Use the installed environment above; the complete benchmark recipe targets the CUDA-enabled AutoDL instance. For another reproduction workspace pass `--name reproduction2` to the preparation script. No committed reference metric is overwritten. The initial matrix uses learning rates 1e-4/3e-4/1e-3, clip ranges 0.1/0.2/0.3 with the baseline shared between the two ablations, seeds 42/43/44, plus an aggressive 0.03 learning-rate run: 16 unique experiments. Before final evaluation, `finalize.py` expands any normal group whose initial final-return seed SD/abs(mean) exceeds 0.30 to five seeds (adds 45/46), using the same 2M-step budget. The saved initial and extension plans are authoritative. Use tmux for long commands on AutoDL.
 
-Training and deterministic evaluation are separate. Checkpoints include frozen observation statistics; evaluation reports raw returns. Final policy selection uses the median final-validation baseline seed, followed by 20 independent test episodes (20000–20019). Current checkpoints support policy reuse, not exact simulator/RNG continuation.
+Training and deterministic evaluation are separate. Checkpoints include frozen observation statistics; evaluation reports raw returns. Final selection first checks the median baseline model on 20 separate selection episodes (11000–11019). If it fails the declared stability rule, all normal candidates are validated and a stable policy is selected by its lower return percentile. Only then are 20 untouched test episodes (30000–30019) used. `final_motion.csv` independently audits forward displacement, velocity and reward decomposition on those same test seeds. Current checkpoints support policy reuse, not exact simulator/RNG continuation.
 
 ## Curves, video and offline tutorial
 
 ```bash
 python scripts/report.py
-MUJOCO_GL=egl python scripts/evaluate.py results/hc_lr0.0003_clip0.2_seed42/checkpoint.pt --episodes 1 --seed 20000 --video results/videos/halfcheetah_running.mp4 --output results/video_evaluation.csv
+MUJOCO_GL=egl python scripts/evaluate.py results/reproduce_baseline_seed42/checkpoint.pt --episodes 1 --seed 30000 --video results/videos/reproduced_running.mp4 --output results/reproduced_video_evaluation.csv
 ```
 
 Open `tutorial/index.html` directly in a browser after generating the report. The HTML embeds real experiment data and uses local JavaScript/SVG with no CDN or Python server. Interactive controls cover PPO clipping, ablations, seeds, training/evaluation selection, hover and zoom. The video path is relative to the repository. `scripts/finalize.py` generates the video from the predeclared representative model rather than necessarily seed 42.

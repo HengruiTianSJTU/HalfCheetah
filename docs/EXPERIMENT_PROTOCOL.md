@@ -16,11 +16,15 @@
 
 每约 100k transitions 用确定性均值动作，在 seeds=10000..10004 上各跑一回合。每个训练 run 的评估都冻结 observation statistics，不更新 reward statistics，不把训练中归一化过的奖励当成报告回报。`eval.csv` 记录每个回合的原始累计回报和长度。
 
-报告的跨 seed SD 由每个训练 seed 的末次 evaluation 均值计算（sample SD，ddof=1），不是把 15 个 episode 假装成 15 次独立训练。AUC 是 evaluation mean 对环境 transitions 积分后除以预算区间。连续观察多个 evaluation checkpoint 会有选择偏差，所以最终政策预先采用 baseline 三个 seeds 中末次 validation 均值的中位数模型，不选最好的一次 episode，也不依据最终 test 改选模型。
+报告的跨 seed SD 由每个训练 seed 的末次 evaluation 均值计算（sample SD，ddof=1），不是把 15 个 episode 假装成 15 次独立训练。AUC 是 evaluation mean 对环境 transitions 积分后除以预算区间。连续观察多个 evaluation checkpoint 会有选择偏差，所以最初预设采用 baseline 末次 validation 均值的中位数模型；以下补充独立稳定性检查，不依据最终 test 改选模型。
 
-选定模型后，最终 test 使用未用于训练或 validation 的 seeds=20000..20019，共 20 回合；另用固定 seed 20000 拍视频，不搜索好看的 seed。20 回合的 SD 描述该模型对初始状态的敏感性。训练 seed 方差则来自独立训练，两者分开报告。
+预先声明的噪声补测规则：仅使用初始 seeds 42/43/44 的末次 validation 均值；若某个正常配置的 sample SD / max(|mean|,1) > 0.30，追加 seeds 45、46，保持训练预算与 PPO 超参数不变，将该配置扩为 5 seeds。规则、初始统计与追加清单保存为 `results/extension_plan.json`，先完成补测再做最终 test；不使用 test 结果决定补测。只有两个补测任务时可采用已验证轨迹一致的 async transport，以利用空闲 CPU；这不改变有序 rollout、batch 或 PPO 更新。
 
-3 个训练 seeds 是有限样本。若波动使结论不可靠，应追加训练预算或 seeds，并保留原计划和原始数据。不能仅比较三组单次最高分，也不能把不显著的排序包装为普遍最优。若出现探索策略与确定性策略明显不一致，应结合动作、视频与 value/KL 日志调查。
+自然失败 checkpoint 说明确定性策略还需要更充分的初始状态验证，因此在最终训练和 test 结束前补充以下选择规则：先取所有 baseline seeds（3 或 5 个）末次 validation 的中位数模型，在独立 selection seeds=11000..11019 上评估。若所有20回合回报>1000 且 episode CV≤0.30，保留该模型；否则在所有正常候选上使用相同 selection seeds，筛选满足相同稳定性条件者，按回报第10百分位最高、再按均值选模型。若无候选通过则继续调查，不进入最终 test。这些门槛是本项目工程标准，不是 Gymnasium 官方 solved 标准。
+
+规则保存为 `results/model_selection_protocol.json`，实际候选回报与选择结果保存为 `selection_eval.csv` / `model_selection.json`。选定后才使用完全不同的 seeds=30000..30019 做20回合最终 test；另用固定 seed 30000 拍视频，不搜索好看的 seed。最终 episode SD 描述同一模型对初始状态的敏感性，训练 seed SD 描述训练随机性，两者分开报告。
+
+3 个或 5 个训练 seeds 都是有限样本。若补测后仍波动大，应明确限制结论，不声称已经分辨出稳定超参数排名。不能仅比较三组单次最高分，也不能把不显著的排序包装为普遍最优。若出现探索策略与确定性策略明显不一致，应结合动作、视频与 value/KL 日志调查。
 
 ## 记录与断点
 
@@ -31,3 +35,5 @@
 Checkpoint 内含网络、normalizer 和优化器；它不包含 MuJoCo 内部 state、所有 RNG 及 vector workers 状态，所以当前实现不支持精确恢复到同一轨迹。要复现实验应从固定 seed 重新训练。CPU/CUDA 及依赖版本差异可经由连续动力学放大，不能承诺跨硬件逐位一致。
 
 训练由 AutoDL tmux 承载，SSH 断线不会中断。GitHub 保存代码、config、compact metrics 和最终图表；checkpoint、原始日志、视频与缓存不直接入 Git。最终视频和模型在本地交付，并记录 hash 以验证它们与评估的对应关系。
+
+最终 test seed 范围在最终候选选择之前修订为 30000..30019，避免与短程软件 QA 曾使用的 20000/20001 重叠；修订前未评估任何最终候选的 test 回报。原始 experiment_plan.json 作为历史记录保留，model_selection_protocol.json 为修订后的执行协议。

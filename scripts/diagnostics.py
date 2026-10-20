@@ -24,6 +24,7 @@ try:
     import torch
     report["cuda_available"] = torch.cuda.is_available()
     report["torch_cuda"] = torch.version.cuda
+    report['gpu_name'] = torch.cuda.get_device_name(0) if torch.cuda.is_available() else None
 except ImportError:
     pass
 Path("results/infrastructure").mkdir(parents=True, exist_ok=True)

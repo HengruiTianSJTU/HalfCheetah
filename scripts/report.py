@@ -33,6 +33,8 @@ def main():
     baseline=[r for r in runs if r['config']['learning_rate']==3e-4 and r['config']['clip_range']==.2]
     normal=[r for r in runs if r['config']['learning_rate']<=.001]
     failure=[r for r in runs if r['config']['learning_rate']>.001]
+    natural_path=Path('results/failures/natural_baseline_seed44/snapshot.json')
+    natural=json.loads(natural_path.read_text()) if natural_path.exists() else None
     figures=Path('results/figures');figures.mkdir(parents=True,exist_ok=True)
     plt.rcParams.update({'figure.figsize':(8.5,5),'font.size':11,'axes.grid':True,'grid.alpha':.25,'savefig.dpi':160})
 
@@ -68,6 +70,9 @@ def main():
     draw_group(baseline,'Baseline lr=0.0003')
     for run in failure:
         draw_group([run],f"Aggressive lr={run['config']['learning_rate']:g}")
+    if natural:
+        draw_group([r for r in runs if r['name']==natural['source_experiment']],'Natural collapse: baseline seed44')
+        plt.scatter([natural['timesteps']/1e6],[natural['evaluation_mean']],color='red',zorder=5,label='Saved poor checkpoint')
     finish('failure_vs_success.png','Aggressive learning rate versus baseline')
     rows=[]
     for run in runs:
@@ -84,6 +89,8 @@ def main():
     table=ax.table(cellText=cells,colLabels=['Learning rate','Clip','Seeds','Final mean','Seed SD','Eval AUC'],loc='center',cellLoc='center');table.auto_set_font_size(False);table.set_fontsize(10);table.scale(1,1.6)
     ax.set_title('Final validation return by configuration (raw reward)',pad=15);fig.tight_layout();fig.savefig(figures/'summary_table.png');plt.close(fig)
     payload=dict(runs=runs,summary=rows,groups=groups,total_training_wall_clock=sum(r['wall_clock'] or 0 for r in rows))
+    if natural:
+        payload['natural_failure']=natural
     benchmark_path=Path('results/benchmark_summary.json')
     if benchmark_path.exists():
         payload['benchmarks']=json.loads(benchmark_path.read_text())

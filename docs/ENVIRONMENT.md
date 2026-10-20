@@ -2,6 +2,8 @@
 
 默认 HalfCheetah-v5 的 observation 是 17 维：8 个位置/角度，加 9 个线速度/角速度。绝对水平位置被排除，使策略可复用于跑道不同位置；完整 simulator state 比 observation 更广，不能混为一谈。6 维动作分别控制前后腿的 thigh、shin、foot，范围 [-1,1]。
 
+MuJoCo 默认有 9 维 qpos 和 9 维 qvel，合计 18 个运动学状态分量；给 agent 的观测去掉了绝对 x，成为 17 维。完整仿真内部还有 time、求解器等状态。由于任务对水平平移不变，去掉绝对 x 不意味着必须依靠它才能决定动作。最终位移审计读取 simulator 的 x 仅用于分析，不把它输入策略。
+
 默认 reward = (x_after − x_before)/0.05 − 0.1 Σ aᵢ²。前一项鼓励向前速度，后一项惩罚过大的控制输入。此平方动作惩罚不是精确的机械能测量。一个 1000 步 episode 对应约 50 秒模拟时间。HalfCheetah 默认不会因为跌倒而 terminated，1000 步是 TimeLimit truncation。
 
 | 默认环境 | Observation | Action | Episode 结束特点 |
