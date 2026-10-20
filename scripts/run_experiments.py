@@ -18,7 +18,7 @@ def main():
     p.add_argument('--config',default='configs/baseline.yaml')
     a=p.parse_args()
     matrix=[(lr,.2,s) for lr in [1e-4,3e-4,1e-3] for s in [42,43,44]]+[(3e-4,clip,s) for clip in [.1,.3] for s in [42,43,44]]+[(.03,.2,42)]
-    plan=dict(timestamp=datetime.now(timezone.utc).isoformat(),workers=a.workers,total_timesteps=a.timesteps,matrix=[dict(learning_rate=lr,clip_range=clip,seed=seed) for lr,clip,seed in matrix],baseline_selection='Choose baseline seed whose final validation mean is closest to median; do not select an individual stochastic episode.',final_test_seeds=list(range(20000,20020)))
+    plan=dict(timestamp=datetime.now(timezone.utc).isoformat(),workers=a.workers,total_timesteps=a.timesteps,matrix=[dict(learning_rate=lr,clip_range=clip,seed=seed) for lr,clip,seed in matrix],baseline_selection='Start with the median baseline final-curve model, then apply scripts/select_model.py stability validation on independent selection seeds before final testing.',final_test_seeds=list(range(30000,30020)))
     Path('results').mkdir(exist_ok=True)
     plan_path=Path('results/experiment_plan.json')
     if plan_path.exists():

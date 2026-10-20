@@ -1,0 +1,47 @@
+{
+  "chosen_experiment": "hc_lr0.0003_clip0.2_seed45",
+  "mode": "median_baseline_after_stability_validation",
+  "selection_seeds": [
+    11000,
+    11001,
+    11002,
+    11003,
+    11004,
+    11005,
+    11006,
+    11007,
+    11008,
+    11009,
+    11010,
+    11011,
+    11012,
+    11013,
+    11014,
+    11015,
+    11016,
+    11017,
+    11018,
+    11019
+  ],
+  "rule": "Start with median final-curve baseline seed; keep it if all 20 selection returns >1000 and episode CV <=0.30. Otherwise assess every normal candidate on the same selection seeds, filter by that same stability rule, and choose highest 10th percentile, breaking ties by mean. Final test seeds 30000..30019 are untouched.",
+  "scores": [
+    {
+      "experiment_name": "hc_lr0.0003_clip0.2_seed45",
+      "mean": 3569.843470282796,
+      "std": 747.5739334006852,
+      "minimum": 1293.0608244132532,
+      "p10": 2189.3417535106387,
+      "cv": 0.20941364505863444,
+      "curve_validation_mean": 3383.8267241425283
+    }
+  ],
+  "chosen_score": {
+    "experiment_name": "hc_lr0.0003_clip0.2_seed45",
+    "mean": 3569.843470282796,
+    "std": 747.5739334006852,
+    "minimum": 1293.0608244132532,
+    "p10": 2189.3417535106387,
+    "cv": 0.20941364505863444,
+    "curve_validation_mean": 3383.8267241425283
+  }
+}

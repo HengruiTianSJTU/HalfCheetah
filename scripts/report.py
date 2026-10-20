@@ -112,7 +112,7 @@ def main():
             return [clean(v) for v in value]
         return None if isinstance(value,float) and not np.isfinite(value) else value
     payload=clean(payload)
-    Path('results/summary.json').write_text(json.dumps(payload,indent=2,allow_nan=False))
+    Path('results/summary.json').write_text(json.dumps(payload,separators=(",",":"),allow_nan=False))
     template=Path('tutorial/template.html').read_text()
     html=template.replace('__EXPERIMENT_DATA__',json.dumps(payload,allow_nan=False))
     Path('tutorial/index.html').write_text(html)

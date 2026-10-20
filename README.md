@@ -2,7 +2,9 @@
 
 Target: Gymnasium HalfCheetah-v5, a continuous control benchmark for the intelligent wireless networking course. PPO concepts will be related to power control and resource allocation; this environment is not a wireless network simulation.
 
-**Status: 6 numerical/checkpoint tests, MuJoCo/EGL smoke and 8 reference benchmarks passed; the 16-run formal matrix is training on AutoDL.** Final multi-seed conclusions are not yet available.
+**Results:** 24 completed custom-PPO experiments, 2,000,896 transitions each. The representative baseline model (lr=3e-4, clip=0.2, seed=45) achieves **3614.6 ±692.5 raw episodic return** across 20 untouched test seeds and **3.94 m/s** mean forward velocity. Baseline validation across five training seeds is **3791.6 ±1874.1** (training-seed SD). These are different measures of variability.
+
+Learning rate 3e-4 has the highest observed group mean and evaluation AUC; 1e-3 is substantially poorer. Clip 0.1 and 0.2 have similar group means relative to their large seed variability, while 0.3 is lower here. A real transient collapse and an aggressive lr=0.03 run are preserved. See [full recorded results](docs/RESULTS.md), [defense guide](docs/DEFENSE.md), and the offline [interactive tutorial](tutorial/index.html).
 
 ## Environment setup
 
@@ -73,12 +75,12 @@ Open `tutorial/index.html` directly in a browser after generating the report. Th
 
 Optional browser QA needs Playwright and Chromium: `python -m pip install playwright`, `python -m playwright install --with-deps chromium`, then `python scripts/check_tutorial.py`.
 
-Technical materials: [PPO implementation and defense notes](docs/ALGORITHM.md), [environment, Hopper and wireless-network comparison](docs/ENVIRONMENT.md).
+Technical materials: [results chapter](docs/RESULTS.md), [presentation and defense guide](docs/DEFENSE.md), [PPO implementation and defense notes](docs/ALGORITHM.md), [environment, Hopper and wireless-network comparison](docs/ENVIRONMENT.md).
 
 The [experiment protocol](docs/EXPERIMENT_PROTOCOL.md) defines budgets, seed aggregation, held-out evaluation and model selection. `python scripts/inspect_environments.py` records installed HalfCheetah/Hopper definitions. After final results are committed, `python scripts/fresh_qa.py` checks a new checkout and a new project dependency venv while reusing the supplied base PyTorch/CUDA.
 
 ## Artifact policy
 
-Commit source, configs, compact metrics, final figures and documentation. Checkpoints, videos, raw TensorBoard logs, virtual environments and credentials are excluded. Final video delivery and checkpoint download instructions will be added after successful training. Do not store SSH credentials in this repository.
+Commit source, configs, compact metrics, final figures and documentation. Checkpoints, videos, raw TensorBoard logs, virtual environments and credentials are excluded. The complete local delivery includes `results/videos/halfcheetah_running.mp4` and `results/hc_lr0.0003_clip0.2_seed45/checkpoint.pt`; SHA-256 identifiers are recorded in `results/final_evaluation_summary.json`. GitHub contains the small final frame/poster, metrics and standalone Tutorial, but excludes model/video binaries. A fresh clone can inspect all curves offline immediately; to play the final video, copy the local delivery's `results/videos/` beside the cloned results, or reproduce training and run `finalize.py`. No public binary download is currently hosted. Do not store SSH credentials in this repository.
 
 See [execution plan](docs/EXECUTION.md) for experiment and delivery criteria.

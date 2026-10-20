@@ -1,0 +1,41 @@
+{
+  "experiment_name": "hc_lr0.0003_clip0.3_seed42",
+  "git_commit": "fe964cf41dafeb5674db838805a69e9239ee4faf",
+  "git_dirty": true,
+  "source_sha256": {
+    "src/halfcheetah/__init__.py": "ee4bc58666c4c8cabdc15cdaffe25945494d84fc1847a6ad3d25214f1cdb76e1",
+    "src/halfcheetah/ppo.py": "ab90687fca6b427617028b9c5744fc0f51d10f8ead75e6865abab8fb31d6308e",
+    "src/halfcheetah/train.py": "0079c26d4c3f765a5c91ccd0aa70608bb1eb3a671f8fafb5545f09c75cf82ecd"
+  },
+  "timestamp": "2026-10-20T09:02:54.071982+00:00",
+  "python": "3.12.3",
+  "versions": {
+    "torch": "2.5.1+cu124",
+    "gymnasium": "1.2.1",
+    "mujoco": "3.3.7",
+    "numpy": "2.1.3",
+    "stable-baselines3": "2.7.0"
+  },
+  "environment": "HalfCheetah-v5",
+  "seed": 42,
+  "device": "cpu",
+  "torch_threads": 1,
+  "n_envs": 8,
+  "vec_backend": "sync",
+  "n_steps": 256,
+  "total_timesteps": 2000000,
+  "learning_rate": 0.0003,
+  "clip_range": 0.3,
+  "gamma": 0.99,
+  "gae_lambda": 0.95,
+  "n_epochs": 10,
+  "minibatch_size": 64,
+  "value_coef": 0.5,
+  "entropy_coef": 0.0,
+  "max_grad_norm": 0.5,
+  "eval_interval": 100000,
+  "eval_episodes": 5,
+  "wall_clock_time": 3676.8880452886224,
+  "actual_timesteps": 2000896,
+  "status": "completed"
+}

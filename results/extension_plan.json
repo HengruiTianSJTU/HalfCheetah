@@ -1,0 +1,130 @@
+{
+  "timestamp": "2026-10-20T10:05:49.144434+00:00",
+  "rule": "Use only the initial 3 seeds: expand any normal group with sample SD / max(abs(mean),1) > 0.30 to seeds 42..46. Do not use final test outcomes.",
+  "assessments": [
+    {
+      "learning_rate": 0.0001,
+      "clip_range": 0.2,
+      "initial_seeds": [
+        42,
+        43,
+        44
+      ],
+      "final_validation_means": [
+        4504.896952414554,
+        2022.7518439205342,
+        1885.7492003685431
+      ],
+      "coefficient_of_variation": 0.5256646976759812,
+      "expand_to_five": true
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.2,
+      "initial_seeds": [
+        42,
+        43,
+        44
+      ],
+      "final_validation_means": [
+        5618.1638881972685,
+        5884.098583506679,
+        2067.7255105135846
+      ],
+      "coefficient_of_variation": 0.4710619086964158,
+      "expand_to_five": true
+    },
+    {
+      "learning_rate": 0.001,
+      "clip_range": 0.2,
+      "initial_seeds": [
+        42,
+        43,
+        44
+      ],
+      "final_validation_means": [
+        1241.7654730925235,
+        1184.7098508251977,
+        983.6954406969671
+      ],
+      "coefficient_of_variation": 0.11925675404122475,
+      "expand_to_five": false
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.1,
+      "initial_seeds": [
+        42,
+        43,
+        44
+      ],
+      "final_validation_means": [
+        2068.246820177996,
+        4140.934934208581,
+        5926.0549954609905
+      ],
+      "coefficient_of_variation": 0.4772934278001785,
+      "expand_to_five": true
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.3,
+      "initial_seeds": [
+        42,
+        43,
+        44
+      ],
+      "final_validation_means": [
+        3210.2162130849597,
+        5213.894703574478,
+        1447.707231702626
+      ],
+      "coefficient_of_variation": 0.5726544648569262,
+      "expand_to_five": true
+    }
+  ],
+  "matrix": [
+    {
+      "learning_rate": 0.0001,
+      "clip_range": 0.2,
+      "seed": 45
+    },
+    {
+      "learning_rate": 0.0001,
+      "clip_range": 0.2,
+      "seed": 46
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.2,
+      "seed": 45
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.2,
+      "seed": 46
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.1,
+      "seed": 45
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.1,
+      "seed": 46
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.3,
+      "seed": 45
+    },
+    {
+      "learning_rate": 0.0003,
+      "clip_range": 0.3,
+      "seed": 46
+    }
+  ],
+  "total_timesteps": 2000000,
+  "vec_backend": "sync"
+}

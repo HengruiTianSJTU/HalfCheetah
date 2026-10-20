@@ -235,3 +235,7 @@ credentials*
 .env.*
 .local/
 results/qa_*/
+
+# Browser screenshots and transient campaign state
+results/qa/*.png
+results/campaign_status.json

@@ -6,7 +6,9 @@
   "evaluation_std": 3.814923126898115,
   "evaluation_episodes": 5,
   "training_return_at_capture": 1801.8931359342469,
-  "source_final_validation_mean": null,
+  "source_final_validation_mean": 2067.7255105135846,
   "checkpoint_sha256": "cd6620014a86d2b26215876b72a6117a5c9027efd4d53805cb891429f8965432",
-  "purpose": "Observed transient deterministic-policy collapse. The original run continues; this is a diagnostic checkpoint, not a separately trained full-budget experiment."
+  "purpose": "Observed transient deterministic-policy collapse. The original run continues; this is a diagnostic checkpoint, not a separately trained full-budget experiment.",
+  "video": "results/videos/natural_failure_seed44.mp4",
+  "poster": "results/figures/failure_frame.png"
 }

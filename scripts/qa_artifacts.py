@@ -100,6 +100,9 @@ def main():
         assert natural['evaluation_mean']<0
         np.testing.assert_allclose(natural['evaluation_mean'],np.mean([float(r['episode_return']) for r in rows(case/'eval.csv')]))
         assert hashlib.sha256((case/'checkpoint.pt').read_bytes()).hexdigest()==natural['checkpoint_sha256']
+    fresh=json.loads(Path('results/qa/fresh_environment.json').read_text())
+    assert fresh['fresh_checkout'] and fresh['new_project_dependency_venv'] and not fresh['core_only']
+    assert fresh['commands_passed']>=9
     subprocess.run(['git','diff','--check'],check=True)
     tracked=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
     for name in filter(None,tracked):

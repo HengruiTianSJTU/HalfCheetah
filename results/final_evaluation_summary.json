@@ -1,0 +1,24 @@
+{
+  "experiment_name": "hc_lr0.0003_clip0.2_seed45",
+  "selection_rule": "Start with median final-curve baseline seed; keep it if all 20 selection returns >1000 and episode CV <=0.30. Otherwise assess every normal candidate on the same selection seeds, filter by that same stability rule, and choose highest 10th percentile, breaking ties by mean. Final test seeds 30000..30019 are untouched.",
+  "selection_mode": "median_baseline_after_stability_validation",
+  "selection_validation": {
+    "experiment_name": "hc_lr0.0003_clip0.2_seed45",
+    "mean": 3569.843470282796,
+    "std": 747.5739334006852,
+    "minimum": 1293.0608244132532,
+    "p10": 2189.3417535106387,
+    "cv": 0.20941364505863444,
+    "curve_validation_mean": 3383.8267241425283
+  },
+  "validation_mean": 3383.8267241425283,
+  "episodes": 20,
+  "mean": 3614.597309561103,
+  "std": 692.4667486584627,
+  "mean_episode_length": 1000.0,
+  "checkpoint_sha256": "8b4ee0db5c261c8d140467b2609bbda7105ff7b057816a841ef227da23fcf619",
+  "video_seed": 30000,
+  "video_sha256": "7195286e903e77948380e3aaeb872ef738ebb766ad7197e841f384aeb2166843",
+  "mean_forward_velocity_m_s": 3.9381291227555204,
+  "std_forward_velocity_m_s": 0.6865835864258419
+}

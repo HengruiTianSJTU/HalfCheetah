@@ -1,0 +1,11 @@
+{
+  "partial_data": false,
+  "offline_file_open": true,
+  "objective_controls": true,
+  "comparison_selectors": true,
+  "run_config_selector": true,
+  "hover": true,
+  "zoom_and_reset": true,
+  "mobile_layout": true,
+  "javascript_errors": []
+}
