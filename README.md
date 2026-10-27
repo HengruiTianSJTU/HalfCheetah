@@ -19,7 +19,7 @@ python scripts/smoke.py
 MUJOCO_GL=egl python scripts/smoke.py --video
 ```
 
-Diagnostics record only allowlisted system details. Run commands from the repository root. Random smoke defaults to seed 42 and 1200 environment steps. CPU-only use is supported; EGL rendering requires working system EGL libraries. AutoDL uses the existing SOCKS network proxy from the jump host; its compute is independent of the PJLab worker.
+Diagnostics record only allowlisted system details. Run commands from the repository root. Random smoke defaults to seed 42 and 1200 environment steps. CPU-only use is supported; EGL rendering requires working system EGL libraries.
 
 For the exact Linux/CUDA dependency versions, install `python -m pip install -r requirements.lock.txt` followed by `python -m pip install --no-deps -e .`. The lock reuses AutoDL's existing `torch==2.5.1+cu124`. On other platforms use the portable project definition and install the appropriate PyTorch build.
 
