@@ -34,8 +34,9 @@ def test_matrix_changes_only_entropy_seed_device_and_budget():
     assert base==before
 
 
-def test_reference_csvs_cannot_be_reused_without_weights():
-    path=REFERENCE/'hc_entropy0_seed42'
+def test_reference_csvs_cannot_be_reused_without_weights(tmp_path):
+    path=tmp_path/'without_weights'
+    shutil.copytree(REFERENCE/'hc_entropy0_seed42',path,ignore=shutil.ignore_patterns('*.pt'))
     c=yaml.safe_load((path/'config.yaml').read_text())
     m=json.loads((path/'metadata.json').read_text())
     with pytest.raises(ValueError,match='Required baseline artifact missing'):
@@ -92,3 +93,12 @@ def test_single_seed_has_no_invented_uncertainty():
     _,runs=report.load_runs(REFERENCE)
     _,groups=report.summarize([r for r in runs if r['config']['seed']==42])
     assert all(g['n_training_seeds']==1 and g['std'] is None and g['cv'] is None for g in groups)
+
+
+def test_report_accepts_matching_lfs_pointer(tmp_path):
+    digest='a'*64
+    p=tmp_path/'checkpoint.pt'
+    p.write_text(f'version https://git-lfs.github.com/spec/v1\noid sha256:{digest}\nsize 123\n')
+    assert report.checkpoint_digest(p,digest)==digest
+    with pytest.raises(ValueError,match='mismatched Git LFS pointer'):
+        report.checkpoint_digest(p,'b'*64)

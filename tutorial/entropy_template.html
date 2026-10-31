@@ -4,7 +4,7 @@
 <style>
 :root{color-scheme:dark;--bg:#101827;--card:#19253a;--text:#eef3ff;--muted:#b6c3db;--accent:#69dec8;--line:#314461}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,sans-serif}main{max-width:1120px;margin:auto;padding:38px 24px 70px}h1{font-size:clamp(29px,5vw,48px);line-height:1.25}h2{font-size:25px;margin-top:38px}a{color:var(--accent)}.sub,small{color:var(--muted)}.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:20px}label{display:inline-block;margin:8px 16px 8px 0;max-width:100%}select,button{max-width:100%;background:#263c5e;color:white;border:1px solid #506e95;border-radius:6px;padding:9px;font:inherit}input{max-width:100%;vertical-align:middle}svg{width:100%;height:auto;display:block}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}.tooltip{min-height:28px;color:var(--accent);font-size:14px;overflow-wrap:anywhere}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:9px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}th:first-child,td:first-child{text-align:left}pre{padding:14px;background:#0d1421;overflow:auto;font-size:13px}code{overflow-wrap:anywhere}.note{border-left:3px solid var(--accent);padding-left:14px}nav{display:flex;gap:18px;flex-wrap:wrap}footer{color:var(--muted);margin-top:35px}output{font-variant-numeric:tabular-nums}
 </style></head><body><main>
-<nav><a id="home" href="index.html">← 原项目 Tutorial</a><a href="#curves">学习曲线</a><a href="#results">种子结果</a><a href="#interpretation">如何解释</a><a href="#reproduce">复现</a></nav>
+<nav><a id="home" href="index.html">← 原项目 Tutorial</a><a href="#curves">学习曲线</a><a href="#results">种子结果</a><a href="#interpretation">如何解释</a><a href="#reproduce">复现</a><a id="videos" href="../results/video/index.html">4090 GPU 权重与视频</a></nav>
 <h1>增加探索奖励，<br>能否改善 PPO 的训练结果？</h1>
 <p>固定学习率 0.0003、clip 0.2，比较熵系数 0、0.001、0.005、0.01。这个补充实验使用自己的复现基线，与原项目的历史实验分别统计。</p>
 <p id="design" class="note"></p>
@@ -33,7 +33,7 @@ python scripts/run_entropy_experiments.py --device cpu --workers 1
 # CUDA 示例：自行选择空闲 GPU
 python scripts/run_entropy_experiments.py --device cuda --gpus 0 --workers 1 \
   --output .local/entropy_cuda</pre>
-<p>报告生成只需要已提交的 CSV、配置和元数据。训练默认运行四组全新实验，输出到独立目录并拒绝覆盖。权重、视频和后台日志遵循原项目的排除规则。</p>
+<p>报告生成只需要已提交的 CSV、配置和元数据。训练默认运行四组全新实验，输出到独立目录并拒绝覆盖。4090 正式实验的权重与视频已通过 Git LFS 发布；运行 git lfs pull 下载。后台日志仍保留在本地。</p>
 </section><footer>自包含离线页面 · 图表由真实日志生成 · 参数切换不执行模型训练</footer>
 </main><script>
 const DATA=__ENTROPY_DATA__;
@@ -42,7 +42,7 @@ const fmt=(x,n=1)=>x==null?'—':Number(x).toLocaleString('en-US',{maximumFracti
 const $=id=>document.getElementById(id);
 const maxStep=Math.max(...DATA.runs.map(r=>r.curve.at(-1).timesteps));
 const coefficients=DATA.groups.map(g=>g.entropy_coef),seeds=[...new Set(DATA.per_seed.map(r=>r.seed))].sort((a,b)=>a-b);
-$('home').href=DATA.home_path||'index.html';
+$('home').href=DATA.home_path||'index.html';$('videos').href=DATA.video_path||'../results/video/index.html';
 $('design').textContent=`${coefficients.length} 组 × ${seeds.length} 个训练种子（${seeds.join('、')}），每次 ${fmt(maxStep,0)} 步。复用 ${DATA.per_seed.filter(r=>r.reused_baseline).length} 次基线，其余为新增训练。每个检查点评估 ${DATA.protocol.validation_seeds.length} 个回合。`;
 $('coefficient').innerHTML=coefficients.map(e=>`<option value="${e}">${e}</option>`).join('');
 $('until').max=maxStep;$('until').value=maxStep;$('inspect').max=maxStep;

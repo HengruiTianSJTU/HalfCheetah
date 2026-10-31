@@ -8,7 +8,7 @@ label,select{max-width:100%}
 <div class="tag">智能无线组网 · 可复现连续控制实验</div>
 <h1>让 HalfCheetah 跑起来，<br>看懂 PPO 如何学习。</h1>
 <p class="sub">自研 PPO · Stable-Baselines3 参考 · 多随机种子 · 真实失败实验。所有曲线来自仓库 CSV；页面离线可用，无 CDN、无服务器依赖。</p>
-<nav><a href="#task">环境</a><a href="#ppo">PPO 交互实验室</a><a href="#experiments">超参数与种子</a><a href="entropy.html">熵系数补充实验</a><a href="#failure">失败分析</a><a href="#video">最终策略</a><a href="#reproduce">复现</a><a href="#wireless">无线组网</a></nav>
+<nav><a href="#task">环境</a><a href="#ppo">PPO 交互实验室</a><a href="#experiments">超参数与种子</a><a href="entropy.html">熵系数补充实验</a><a href="../results/video/index.html">4090 GPU 权重与视频</a><a href="#failure">失败分析</a><a href="#video">最终策略</a><a href="#reproduce">复现</a><a href="#wireless">无线组网</a></nav>
 <section id="headline"><h2>真实实验概览</h2><div class="cards" id="stats"></div><p class="sub" id="status"></p></section>
 <section id="task"><h2>01 / 任务、观测、动作与奖励</h2>
 <div class="cards"><div class="card"><div class="big">17</div>观测维度<p>8 个位置/角度 + 9 个速度。绝对水平位置被排除；观测不是完整仿真器内部状态。</p></div><div class="card"><div class="big">6</div>连续动作<p>前后腿各 3 个关节的控制输入，范围 [-1,1]；策略训练时采样高斯，评估使用均值。</p></div><div class="card"><div class="big">1000</div>每回合步数上限<p>HalfCheetah 默认无健康终止；达到时间上限是 truncated，仍要 bootstrap。</p></div></div>

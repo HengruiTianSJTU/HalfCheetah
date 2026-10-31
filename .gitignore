@@ -239,3 +239,8 @@ results/qa_*/
 # Browser screenshots and transient campaign state
 results/qa/*.png
 results/campaign_status.json
+
+# Published RTX 4090 experiment artifacts (stored with Git LFS).
+!results/reproduction_4090_20261030/**/checkpoint.pt
+!results/entropy_sweep_20261030/**/checkpoint.pt
+!results/video/**/*.mp4

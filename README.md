@@ -99,6 +99,34 @@ see the supplement for CUDA, explicit baseline reuse and short-check commands.
 
 ## Artifact policy
 
-Commit source, configs, compact metrics, final figures and documentation. Checkpoints, videos, raw TensorBoard logs, virtual environments and credentials are excluded. The complete local delivery includes `results/videos/halfcheetah_running.mp4` and `results/hc_lr0.0003_clip0.2_seed45/checkpoint.pt`; SHA-256 identifiers are recorded in `results/final_evaluation_summary.json`. GitHub contains the small final frame/poster, metrics and standalone Tutorial, but excludes model/video binaries. A fresh clone can inspect all curves offline immediately; to play the final video, copy the local delivery's `results/videos/` beside the cloned results, or reproduce training and run `finalize.py`. No public binary download is currently hosted. Do not store SSH credentials in this repository.
+Source, configurations, compact metrics, figures and documentation are committed.
+The **4090 GPU 实现结果** now also publishes selected experiment directories' weights
+and videos through **Git LFS**. The original CPU reference study's binary delivery
+remains separate; its `results/videos/halfcheetah_running.mp4` and seed-45 policy
+are not the 4090 reproduction's selected policy.
+
+### 4090 GPU 实现结果：全部正式实验权重与视频
+
+- [Video gallery (open locally)](results/video/index.html) and [download/use instructions](results/video/README.md).
+- [26 learning-rate/clip checkpoints and their own logs](results/reproduction_4090_20261030/).
+- [20 entropy checkpoint paths and logs](results/entropy_sweep_20261030/): 15 new models plus five reused controls.
+- [Manifest linking weights, configurations and videos](results/video/4090_gpu/manifest.json).
+
+These are **41 distinct trained policies across 46 checkpoint paths**. All formal
+training used RTX 4090 CUDA; deterministic video inference uses CPU and EGL renders
+the enlarged floor. The 26-run narrative and the entropy supplement are labeled
+separately. New videos do not change any model-selection or final-test result.
+
+Install Git LFS, then download the published objects from the repository root:
+
+```bash
+git lfs install
+git lfs pull
+```
+
+Without Git LFS objects, CSV-based reports still regenerate; a small text pointer
+cannot be loaded as a checkpoint or played as a video. Only the named 4090 artifact
+directories are exempted from the binary ignore rules. Other checkpoints/videos,
+raw console/TensorBoard logs, virtual environments and credentials remain excluded.
 
 See [execution plan](docs/EXECUTION.md) for experiment and delivery criteria.

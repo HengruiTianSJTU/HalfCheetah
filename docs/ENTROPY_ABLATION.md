@@ -142,14 +142,23 @@ validation seed 10000, one 1000-step episode per checkpoint. Every recorded retu
 was reproduced with absolute difference **0**. This is a sampled replay of the
 existing validation set, not a new independent test. Evidence is in
 `acceptance_replay.csv` and `acceptance_recheck.json`; these are historical records
-of the local binary delivery. A fresh clone cannot repeat checkpoint replay without
-the excluded weights.
+of the local binary delivery. The weights are now published through Git LFS;
+run `git lfs pull` before repeating checkpoint evaluation.
 
-Commit source, configurations, compact CSV/JSON, figures, this report and the
-standalone Tutorial. Checkpoints, videos, ZIPs, raw console logs and environment
-directories remain excluded under the existing policy. This supplement adds no
-new video. Portable integration and offline-browser checks are recorded separately
-in `results/entropy_sweep_20261030/integration_qa.json`.
+Source, configurations, compact CSV/JSON, figures, this report and the standalone
+Tutorial are committed. Following the explicit request to publish binaries, the
+20 entropy checkpoint paths and their videos are also tracked through Git LFS.
+ZIPs, raw console logs and environment directories remain excluded. The
+[4090 GPU video gallery](../results/video/index.html) includes all 20 entropy
+demonstrations, four five-seed comparisons and one fixed-seed coefficient comparison.
+All demonstrations use environment seed 10000; video inference is CPU deterministic,
+whereas the recorded training validation used CUDA. These single episodes must not
+be substituted for the five-episode validation means.
+
+Portable integration and offline-browser checks from the original metrics-only
+submission are retained in `results/entropy_sweep_20261030/integration_qa.json`.
+Binary-publication validation is recorded separately in
+`results/video/4090_gpu/publication_qa.json`.
 
 AI assistance was used for experiment orchestration, verification, report/plot code
 and integration drafting. For the course submission, group members must review the

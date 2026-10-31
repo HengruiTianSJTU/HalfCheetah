@@ -22,6 +22,22 @@ def rows(path):
         return list(csv.DictReader(f))
 
 
+def checkpoint_digest(path, recorded=None):
+    """Report generation also works before optional Git LFS objects are downloaded."""
+    if not path.exists():
+        return recorded
+    content=path.read_bytes()
+    if content.startswith(b'version https://git-lfs.github.com/spec/v1\n'):
+        oid=next((line[11:] for line in content.decode().splitlines() if line.startswith('oid sha256:')),None)
+        if not oid or len(oid)!=64 or (recorded and oid!=recorded):
+            raise ValueError(f'Invalid or mismatched Git LFS pointer: {path}')
+        return oid
+    digest=hashlib.sha256(content).hexdigest()
+    if recorded and digest!=recorded:
+        raise ValueError(f'Checkpoint hash mismatch: {path}')
+    return digest
+
+
 def csv_write(path, records):
     with path.open('w', newline='') as f:
         writer = csv.DictWriter(f, fieldnames=list(records[0]), lineterminator='\n')
@@ -79,7 +95,7 @@ def load_runs(directory):
                 raise ValueError(f'Invalid evaluation: {path}')
             curve.append(dict(timesteps=step, mean=float(np.mean(vals))))
         cp = path/'checkpoint.pt'
-        digest = hashlib.sha256(cp.read_bytes()).hexdigest() if cp.exists() else hashes.get(path.name)
+        digest = checkpoint_digest(cp, hashes.get(path.name))
         runs.append(dict(name=path.name, config=c, metadata=meta, curve=curve, train=train,
                          checkpoint_sha256=digest, reused_baseline=path.name in reused))
     if seen != expected:
@@ -178,6 +194,7 @@ def main():
                              train=[dict(timesteps=p['timesteps'],entropy=p['entropy']) for p in points]))
     display=dict(groups=groups,per_seed=per_seed,runs=view_runs,protocol=protocol,
                  home_path=Path(os.path.relpath(ROOT/'tutorial/index.html',args.html.resolve().parent)).as_posix(),
+                 video_path=Path(os.path.relpath(ROOT/'results/video/index.html',args.html.resolve().parent)).as_posix(),
                  results_path=Path(os.path.relpath(args.results.resolve(),args.html.resolve().parent)).as_posix())
     template=(ROOT/'tutorial/entropy_template.html').read_text()
     args.html.parent.mkdir(parents=True,exist_ok=True)

@@ -1,0 +1,36 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>4090 GPU 实现结果 · HalfCheetah</title><style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#101827;color:#eef3ff;font:16px/1.75 system-ui,sans-serif}main{max-width:1120px;margin:auto;padding:32px 24px 70px}h1{font-size:clamp(28px,5vw,46px);line-height:1.3}h2{margin-top:32px}a{color:#69dec8}nav{display:flex;gap:20px;flex-wrap:wrap}.sub{color:#b6c3db}.panel{padding:20px;background:#19253a;border:1px solid #314461;border-radius:12px}label{display:block;margin:12px 0}select{max-width:100%;background:#263c5e;color:white;border:1px solid #506e95;border-radius:6px;padding:9px;font:inherit}#pick{width:100%}video{width:100%;max-height:580px;background:#080c14;border-radius:8px}code{overflow-wrap:anywhere}pre{padding:14px;background:#0d1421;overflow:auto}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:9px;border-bottom:1px solid #314461;text-align:left;white-space:nowrap}#related{overflow-wrap:anywhere}#related a{display:block}footer{margin-top:30px;color:#b6c3db}button{background:#263c5e;color:white;padding:10px;border:1px solid #506e95;border-radius:6px;cursor:pointer}
+</style></head><body><main>
+<nav><a href="../../tutorial/index.html">主实验 Tutorial</a><a href="../../tutorial/entropy.html">熵系数实验</a><a href="README.md">下载与复核说明</a></nav>
+<h1>4090 GPU 实现结果</h1>
+<p id="counts"></p><p class="sub">26 次学习率/clip 实验，加 15 次新增熵实验；熵对照复用了 5 个基线。模型训练使用 RTX 4090 CUDA，视频策略推理使用 CPU，地面已扩展。</p>
+<div class="panel"><h2>先看实验过程，再比较具体策略</h2>
+<label>实验批次 <select id="cohort"><option value="all">全部</option><option value="main">学习率 / clip 主实验</option><option value="entropy">熵系数补充实验</option></select></label>
+<label>视频类型 <select id="kind"><option value="all">全部</option><option value="story">实验叙事</option><option value="final">最终策略</option><option value="comparison">参数 / 种子同屏对比</option><option value="policy">单模型完整回合</option></select></label>
+<label>选择视频 <select id="pick"></select></label><p id="empty" hidden>该组合没有视频，请切换批次或类型。</p>
+<video id="player" controls preload="metadata"></video><p id="details" class="sub"></p><a id="download">打开当前 MP4</a>
+<details><summary>查看该视频对应的权重</summary><div id="related"></div></details>
+<p class="sub">视频回报是一个固定初始状态的单回合结果；同屏统计来自多个训练种子的验证均值。两者不能互相替代。视频均为正常速度，不自动播放。</p></div>
+<h2>全部正式实验权重</h2><p>随上方“实验批次”筛选。五个熵基线与主实验的基线权重相同，不计为新增训练。</p>
+<div class="scroll"><table><thead><tr><th>批次</th><th>学习率</th><th>clip</th><th>熵系数</th><th>训练种子</th><th>权重</th></tr></thead><tbody id="weights"></tbody></table></div>
+<h2>下载 Git LFS 文件</h2><pre>git lfs install
+git lfs pull</pre><p>如果视频无法加载，或权重文件只有几行文本，请先下载 LFS 对象。文件清单与校验值见 <a href="4090_gpu/manifest.json">manifest.json</a>；验证结果见 <a href="4090_gpu/publication_qa.json">publication_qa.json</a>。</p>
+<footer>已有 26 次实验叙事与熵系数补充分别展示；本次发布未改变原模型选择与独立测试结果。</footer>
+</main><script>
+const DATA=__VIDEO_DATA__;
+const $=id=>document.getElementById(id),url=path=>'../../'+path;
+$('counts').textContent=`${DATA.checkpoint_paths} 个权重路径 · ${DATA.distinct_policies} 个不同模型 · ${DATA.video_paths} 个视频`;
+const order={story:0,final:1,comparison:2,policy:3};let visible=[];
+function select(){const v=visible[+$('pick').value];if(!v)return;
+const player=$('player');player.pause();player.src=url(v.path);player.poster=v.poster?url(v.poster):'';player.load();
+$('details').textContent=`${v.title} · ${v.width}×${v.height} · ${v.duration} 秒 · ${v.fps} fps`+(v.episode_return==null?'':` · 本演示回报 ${v.episode_return.toFixed(1)}`);
+$('download').href=url(v.path);$('download').textContent='打开当前 MP4';
+$('related').innerHTML=v.checkpoints.map(path=>`<a href="${url(path)}">${path.split('/').at(-2)} / checkpoint.pt</a>`).join('');}
+function filter(){const cohort=$('cohort').value,kind=$('kind').value;
+visible=DATA.videos.filter(v=>(cohort==='all'||v.cohort===cohort)&&(kind==='all'||v.category===kind)).sort((a,b)=>order[a.category]-order[b.category]||a.title.localeCompare(b.title));
+$('pick').innerHTML=visible.map((v,i)=>`<option value="${i}">${v.title}</option>`).join('');
+$('empty').hidden=visible.length>0;$('player').hidden=!visible.length;$('download').hidden=!visible.length;$('pick').disabled=!visible.length;
+if(visible.length)select();else{$('player').pause();$('player').removeAttribute('src');$('player').load();$('details').textContent='';$('related').textContent=''}
+$('weights').innerHTML=DATA.checkpoints.filter(r=>cohort==='all'||r.cohort===cohort).map(r=>`<tr><td>${r.cohort==='main'?'主实验':'熵实验'}</td><td>${r.learning_rate}</td><td>${r.clip_range}</td><td>${r.entropy_coef}</td><td>${r.training_seed}</td><td><a href="${url(r.path)}">checkpoint.pt</a></td></tr>`).join('');}
+$('cohort').onchange=filter;$('kind').onchange=filter;$('pick').onchange=select;filter();window.VIDEO_DATA=DATA;
+</script></body></html>

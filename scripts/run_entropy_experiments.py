@@ -44,6 +44,9 @@ def validate_reuse(path, expected, source_hashes, versions):
         if not (path/filename).is_file():
             raise ValueError(f'Required baseline artifact missing: {path/filename}')
     import torch
+    with (path/'checkpoint.pt').open('rb') as checkpoint_file:
+        if checkpoint_file.read(80).startswith(b'version https://git-lfs.github.com/spec/v1'):
+            raise ValueError(f'Baseline is a Git LFS pointer; run git lfs pull first: {path}')
     state = torch.load(path/'checkpoint.pt', map_location='cpu', weights_only=False)
     if state.get('config') != expected or state.get('timesteps') != actual:
         raise ValueError(f'Baseline checkpoint configuration/budget mismatch: {path}')
