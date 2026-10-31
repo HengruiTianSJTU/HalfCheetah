@@ -81,8 +81,52 @@ The [experiment protocol](docs/EXPERIMENT_PROTOCOL.md) defines budgets, seed agg
 
 Final validation: the [QA record](docs/QA.md) documents a fresh checkout/new project-dependency environment, all six tests, EGL smoke, training/evaluation, byte-identical plot/Tutorial regeneration, offline browser controls and artifact audits.
 
+## Supplemental entropy-coefficient experiment
+
+The [entropy ablation](docs/ENTROPY_ABLATION.md) fixes lr=3e-4 and clip=0.2 and
+compares entropy coefficients 0 / 0.001 / 0.005 / 0.01 across seeds 42–46. It adds
+15 CUDA training runs and reuses five compatible baselines from a separate
+2026-10-30 reproduction; it does not change the original 24-run study above.
+Its reproduced baseline is **3359.4 ±2067.7**, while coefficient 0.001 gives
+**3422.1 ±1118.9** (training-seed SD). The small mean improvement, lower learning
+curve AUC and mixed paired-seed outcomes do not establish a universally better setting.
+
+Open the offline [entropy Tutorial](tutorial/entropy.html), inspect the
+[group results](results/entropy_sweep_20261030/group_summary.csv), or regenerate
+them with `python scripts/report_entropy.py` (no weights required). Run a new
+matrix with `python scripts/run_entropy_experiments.py --device cpu --workers 1`;
+see the supplement for CUDA, explicit baseline reuse and short-check commands.
+
 ## Artifact policy
 
-Commit source, configs, compact metrics, final figures and documentation. Checkpoints, videos, raw TensorBoard logs, virtual environments and credentials are excluded. The complete local delivery includes `results/videos/halfcheetah_running.mp4` and `results/hc_lr0.0003_clip0.2_seed45/checkpoint.pt`; SHA-256 identifiers are recorded in `results/final_evaluation_summary.json`. GitHub contains the small final frame/poster, metrics and standalone Tutorial, but excludes model/video binaries. A fresh clone can inspect all curves offline immediately; to play the final video, copy the local delivery's `results/videos/` beside the cloned results, or reproduce training and run `finalize.py`. No public binary download is currently hosted. Do not store SSH credentials in this repository.
+Source, configurations, compact metrics, figures and documentation are committed.
+The **4090 GPU 实现结果** now also publishes selected experiment directories' weights
+and videos through **Git LFS**. The original CPU reference study's binary delivery
+remains separate; its `results/videos/halfcheetah_running.mp4` and seed-45 policy
+are not the 4090 reproduction's selected policy.
+
+### 4090 GPU 实现结果：全部正式实验权重与视频
+
+- [Video gallery (open locally)](results/video/index.html) and [download/use instructions](results/video/README.md).
+- [26 learning-rate/clip checkpoints and their own logs](results/reproduction_4090_20261030/).
+- [20 entropy checkpoint paths and logs](results/entropy_sweep_20261030/): 15 new models plus five reused controls.
+- [Manifest linking weights, configurations and videos](results/video/4090_gpu/manifest.json).
+
+These are **41 distinct trained policies across 46 checkpoint paths**. All formal
+training used RTX 4090 CUDA; deterministic video inference uses CPU and EGL renders
+the enlarged floor. The 26-run narrative and the entropy supplement are labeled
+separately. New videos do not change any model-selection or final-test result.
+
+Install Git LFS, then download the published objects from the repository root:
+
+```bash
+git lfs install
+git lfs pull
+```
+
+Without Git LFS objects, CSV-based reports still regenerate; a small text pointer
+cannot be loaded as a checkpoint or played as a video. Only the named 4090 artifact
+directories are exempted from the binary ignore rules. Other checkpoints/videos,
+raw console/TensorBoard logs, virtual environments and credentials remain excluded.
 
 See [execution plan](docs/EXECUTION.md) for experiment and delivery criteria.

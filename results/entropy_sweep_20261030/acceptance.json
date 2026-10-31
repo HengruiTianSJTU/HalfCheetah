@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "checked_at": "2026-10-30T20:16:23.850368+08:00",
+  "groups": 4,
+  "total_runs": 20,
+  "new_runs": 15,
+  "reused_runs": 5,
+  "all_checkpoints_finite": true,
+  "all_configs_match": true,
+  "all_source_hashes_match": true,
+  "all_budgets": 2000896,
+  "eval_rows_per_run": 105,
+  "held_out_test_used": false,
+  "figure_files_decode": true,
+  "visual_review": "passed",
+  "visual_review_at": "2026-10-31T14:43:29.280669+08:00",
+  "visual_review_notes": "Inspected all four figures; adjusted colliding seed labels without changing data.",
+  "independent_recheck": "acceptance_recheck.json"
+}

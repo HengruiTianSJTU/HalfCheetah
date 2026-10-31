@@ -1,0 +1,65 @@
+{
+  "raw_files_verified": 100,
+  "source_revision_verified": "240f874d3781174282e8b98315714632507dc6b4",
+  "runs": 20,
+  "group_and_paired_metrics_recomputed": true,
+  "historical_replay_records_reconciled": true,
+  "weights_required": false,
+  "offline_browser": true,
+  "coefficient_and_seed_controls": true,
+  "entropy_metric": true,
+  "horizon_and_reset": true,
+  "keyboard_and_hover": true,
+  "local_links": true,
+  "mobile_layout": true,
+  "javascript_errors": [],
+  "remote_requests": [],
+  "checked_at": "2026-10-31T15:24:01.955586+08:00",
+  "pytest_passed": 14,
+  "short_training": {
+    "device": "cpu",
+    "coefficients": [
+      0,
+      0.001,
+      0.005,
+      0.01
+    ],
+    "seeds": [
+      42
+    ],
+    "transitions_per_run": 2048,
+    "status": "completed",
+    "scientific_results": false
+  },
+  "baseline_reuse_dry_run": {
+    "validated": 5,
+    "new_training_jobs": 15
+  },
+  "existing_output_refused": true,
+  "byte_identical_regeneration": true,
+  "original_tutorial_browser": {
+    "partial_data": false,
+    "offline_file_open": true,
+    "objective_controls": true,
+    "comparison_selectors": true,
+    "run_config_selector": true,
+    "hover": true,
+    "zoom_and_reset": true,
+    "mobile_layout": true,
+    "javascript_errors": []
+  },
+  "visual_review": {
+    "desktop": true,
+    "mobile": true,
+    "scope": "Entropy tutorial rendered screenshots and exported figures"
+  },
+  "fresh_checkout": {
+    "fresh_checkout": true,
+    "staged_snapshot": true,
+    "no_model_binaries": true,
+    "regeneration_byte_identical": true,
+    "artifact_count": 8,
+    "pytest_passed": 14
+  },
+  "csv_import": "LF canonicalization per existing .gitattributes; parsed values unchanged; original and repository hashes retained separately"
+}

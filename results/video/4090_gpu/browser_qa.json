@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "pytest_passed": 15,
+  "entropy_browser_audit": true,
+  "gallery_offline": true,
+  "all_video_and_weight_links": true,
+  "cohort_and_category_filters": true,
+  "video_playback_and_seek": "not tested: bundled Chromium lacks H.264 decoder",
+  "full_video_decode_verified_by": "scripts/check_4090_artifacts.py",
+  "mobile_layout": true,
+  "javascript_errors": [],
+  "remote_requests": []
+}

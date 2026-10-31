@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HalfCheetah PPO · 熵系数补充实验</title>
+<style>
+:root{color-scheme:dark;--bg:#101827;--card:#19253a;--text:#eef3ff;--muted:#b6c3db;--accent:#69dec8;--line:#314461}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.75 system-ui,sans-serif}main{max-width:1120px;margin:auto;padding:38px 24px 70px}h1{font-size:clamp(29px,5vw,48px);line-height:1.25}h2{font-size:25px;margin-top:38px}a{color:var(--accent)}.sub,small{color:var(--muted)}.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:20px}label{display:inline-block;margin:8px 16px 8px 0;max-width:100%}select,button{max-width:100%;background:#263c5e;color:white;border:1px solid #506e95;border-radius:6px;padding:9px;font:inherit}input{max-width:100%;vertical-align:middle}svg{width:100%;height:auto;display:block}.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px}.tooltip{min-height:28px;color:var(--accent);font-size:14px;overflow-wrap:anywhere}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:9px;border-bottom:1px solid var(--line);white-space:nowrap;text-align:right}th:first-child,td:first-child{text-align:left}pre{padding:14px;background:#0d1421;overflow:auto;font-size:13px}code{overflow-wrap:anywhere}.note{border-left:3px solid var(--accent);padding-left:14px}nav{display:flex;gap:18px;flex-wrap:wrap}footer{color:var(--muted);margin-top:35px}output{font-variant-numeric:tabular-nums}
+</style></head><body><main>
+<nav><a id="home" href="index.html">← 原项目 Tutorial</a><a href="#curves">学习曲线</a><a href="#results">种子结果</a><a href="#interpretation">如何解释</a><a href="#reproduce">复现</a><a id="videos" href="../results/video/index.html">4090 GPU 权重与视频</a></nav>
+<h1>增加探索奖励，<br>能否改善 PPO 的训练结果？</h1>
+<p>固定学习率 0.0003、clip 0.2，比较熵系数 0、0.001、0.005、0.01。这个补充实验使用自己的复现基线，与原项目的历史实验分别统计。</p>
+<p id="design" class="note"></p>
+<p class="sub">训练损失包含 −βH(π)：β 越大，优化越鼓励策略保留随机性。β=0 仍然采样高斯动作。高斯微分熵可以为负；图中的熵是动作裁剪前的分布熵，不等同于实际动作覆盖范围。</p>
+<section id="curves"><h2>曲线：平均表现与种子差异</h2><div class="panel">
+<label>比较视角 <select id="view"><option value="group">四组均值 ± 跨种子标准差</option><option value="seed">单个熵系数的各训练种子</option></select></label>
+<label>熵系数 <select id="coefficient"></select></label>
+<label>指标 <select id="metric"><option value="curve">确定性验证回报</option><option value="train">训练策略微分熵</option></select></label>
+<label>显示至 <input id="until" type="range" min="2048" step="2048"><output id="untilValue"></output></label>
+<button id="reset">重置</button>
+<div id="chart"></div><div id="legend" class="legend"></div>
+<div id="tip" class="tooltip" aria-live="polite">移动鼠标查看数值，或用下面的滑块选择数据点。</div>
+<label>查看步数 <input id="inspect" type="range" min="0" value="0" step="2048"><output id="inspectValue"></output></label>
+<p class="sub">控件只切换已完成实验的数据，不重新训练。阴影为训练种子均值的 ±1 样本标准差，不是置信区间。验证初始种子在训练中重复使用，不是最终测试集。</p>
+</div></section>
+<section id="results"><h2>末次验证结果</h2><div class="scroll"><table><thead><tr><th>熵系数</th><th>训练种子数</th><th>均值</th><th>样本标准差</th><th>归一化曲线面积</th><th>相对基线均值</th></tr></thead><tbody id="groups"></tbody></table></div>
+<h3>逐训练种子对比</h3><div class="scroll"><table><thead><tr><th>训练种子</th><th>β=0</th><th>β=0.001</th><th>β=0.005</th><th>β=0.01</th></tr></thead><tbody id="seeds"></tbody></table></div>
+<p class="sub">先对每个模型的验证回合取平均，再对训练种子统计均值和标准差。曲线面积使用全部验证检查点，除以训练步数区间；它描述整个学习过程。</p></section>
+<section id="interpretation"><h2>如何解释这组实验</h2><p id="comparison"></p>
+<p>均值更高不代表每个种子都更好，较小标准差也不保证最差情况改善。先比较同种子的差值，再检查学习曲线、策略熵与异常轨迹。仅靠这些曲线不能确定唯一的失败原因。</p>
+<p>本轮未新增独立最终测试，不能与原最终模型的测试回报直接排名。更大的熵系数并不保证更高回报；有限训练种子不能证明某个系数普遍最优。</p></section>
+<section id="reproduce"><h2>数据、配置与复现</h2><p id="sources"></p>
+<label>检查实验 <select id="run"></select></label><pre id="config"></pre><p id="runSources"></p>
+<p>从仓库根目录运行：</p><pre>python scripts/report_entropy.py
+python scripts/run_entropy_experiments.py --device cpu --workers 1
+# CUDA 示例：自行选择空闲 GPU
+python scripts/run_entropy_experiments.py --device cuda --gpus 0 --workers 1 \
+  --output .local/entropy_cuda</pre>
+<p>报告生成只需要已提交的 CSV、配置和元数据。训练默认运行四组全新实验，输出到独立目录并拒绝覆盖。4090 正式实验的权重与视频已通过 Git LFS 发布；运行 git lfs pull 下载。后台日志仍保留在本地。</p>
+</section><footer>自包含离线页面 · 图表由真实日志生成 · 参数切换不执行模型训练</footer>
+</main><script>
+const DATA=__ENTROPY_DATA__;
+const COLORS=['#72baf6','#f8b96a','#69dec8','#f48ca6','#c7de75'];
+const fmt=(x,n=1)=>x==null?'—':Number(x).toLocaleString('en-US',{maximumFractionDigits:n,minimumFractionDigits:n});
+const $=id=>document.getElementById(id);
+const maxStep=Math.max(...DATA.runs.map(r=>r.curve.at(-1).timesteps));
+const coefficients=DATA.groups.map(g=>g.entropy_coef),seeds=[...new Set(DATA.per_seed.map(r=>r.seed))].sort((a,b)=>a-b);
+$('home').href=DATA.home_path||'index.html';$('videos').href=DATA.video_path||'../results/video/index.html';
+$('design').textContent=`${coefficients.length} 组 × ${seeds.length} 个训练种子（${seeds.join('、')}），每次 ${fmt(maxStep,0)} 步。复用 ${DATA.per_seed.filter(r=>r.reused_baseline).length} 次基线，其余为新增训练。每个检查点评估 ${DATA.protocol.validation_seeds.length} 个回合。`;
+$('coefficient').innerHTML=coefficients.map(e=>`<option value="${e}">${e}</option>`).join('');
+$('until').max=maxStep;$('until').value=maxStep;$('inspect').max=maxStep;
+const baseline=DATA.groups.find(g=>g.entropy_coef===0);
+$('groups').innerHTML=DATA.groups.map(g=>`<tr><td>${g.entropy_coef}</td><td>${g.n_training_seeds}</td><td>${fmt(g.mean)}</td><td>${fmt(g.std)}</td><td>${fmt(g.mean_normalized_auc)}</td><td>${fmt((g.mean/baseline.mean-1)*100)}%</td></tr>`).join('');
+$('seeds').innerHTML=seeds.map(s=>`<tr><td>${s}</td>${coefficients.map(e=>`<td>${fmt(DATA.per_seed.find(r=>r.seed===s&&r.entropy_coef===e).final_validation_mean)}</td>`).join('')}</tr>`).join('');
+const small=DATA.groups.find(g=>g.entropy_coef===.001);
+const improved=DATA.per_seed.filter(r=>r.entropy_coef===.001&&r.paired_difference_vs_baseline>0).length;
+$('comparison').textContent=`β=0.001 相对基线的末次均值变化 ${fmt((small.mean/baseline.mean-1)*100)}%，全程归一化曲线面积变化 ${fmt((small.mean_normalized_auc/baseline.mean_normalized_auc-1)*100)}%；${improved}/${seeds.length} 个训练种子的末次回报提高。${small.std==null?'单个训练种子无法估计跨种子标准差。':`本次跨种子标准差为 ${fmt(small.std)}，基线为 ${fmt(baseline.std)}。`}这些是本次样本的描述，不能直接推断显著提升。`;
+const link=(name,label)=>`<a href="${DATA.results_path}/${name}">${label}</a>`;
+$('sources').innerHTML=[link('protocol.json','实验方案'),link('group_summary.csv','分组 CSV'),link('per_seed_summary.csv','逐种子 CSV')].join(' · ');
+$('run').innerHTML=DATA.runs.map((r,i)=>`<option value="${i}">${r.name}</option>`).join('');
+function config(){const r=DATA.runs[+$('run').value];$('config').textContent=JSON.stringify(r.config,null,2);$('runSources').innerHTML=['config.yaml','metadata.json','metrics.csv','eval.csv'].map(f=>link(`${r.name}/${f}`,f)).join(' · ')}
+$('run').onchange=config;config();
+let active=[];
+function lines(){const kind=$('metric').value,key=kind==='curve'?'mean':'entropy';
+function points(run){return run[kind].map(p=>({x:p.timesteps,y:p[key],sd:0}))}
+if($('view').value==='seed')return DATA.runs.filter(r=>r.config.entropy_coef===+$('coefficient').value).map(r=>({label:`seed ${r.config.seed}`,points:points(r)}));
+return coefficients.map(e=>{const block=DATA.runs.filter(r=>r.config.entropy_coef===e),series=block.map(points);return{label:`β=${e}`,points:series[0].map((p,i)=>{const values=series.map(s=>s[i].y),mean=values.reduce((a,b)=>a+b,0)/values.length;return{x:p.x,y:mean,sd:values.length>1?Math.sqrt(values.reduce((a,b)=>a+(b-mean)**2,0)/(values.length-1)):0}})}})}
+function inspect(x){$('inspectValue').textContent=` ${fmt(x/1e6,3)} M`;$('tip').textContent=active.map(s=>{const p=s.points.reduce((a,b)=>Math.abs(b.x-x)<Math.abs(a.x-x)?b:a);return `${s.label}: ${fmt(p.x,0)} 步，${fmt(p.y,2)}`}).join(' | ')}
+function draw(){active=lines();const end=+$('until').value;$('untilValue').textContent=` ${fmt(end/1e6,3)} M`;$('coefficient').disabled=$('view').value!=='seed';$('inspect').max=end;
+const W=960,H=420,p={l:88,r:24,t:24,b:65},iw=W-p.l-p.r,ih=H-p.t-p.b;
+let visible=active.flatMap(s=>s.points).filter(v=>v.x<=end);if(!visible.length)visible=active.flatMap(s=>s.points);
+let lo=Math.min(...visible.map(v=>v.y-v.sd)),hi=Math.max(...visible.map(v=>v.y+v.sd)),margin=(hi-lo||1)*.08;lo-=margin;hi+=margin;
+const X=x=>p.l+x/end*iw,Y=y=>p.t+(hi-y)/(hi-lo)*ih;
+let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="熵系数实验曲线"><defs><clipPath id="plotClip"><rect x="${p.l}" y="${p.t}" width="${iw}" height="${ih}"/></clipPath></defs>`;
+for(let i=0;i<=5;i++){const y=p.t+ih*i/5;svg+=`<path d="M${p.l} ${y}H${W-p.r}" stroke="#314461"/><text x="${p.l-10}" y="${y+5}" text-anchor="end" fill="#b6c3db" font-size="13">${fmt(hi-(hi-lo)*i/5,$('metric').value==='train'?1:0)}</text><text x="${p.l+iw*i/5}" y="${H-34}" text-anchor="middle" fill="#b6c3db" font-size="13">${fmt(end*i/5/1e6,2)}</text>`}
+svg+='<g clip-path="url(#plotClip)">';
+active.forEach((s,i)=>{const a=s.points,color=COLORS[i%COLORS.length],dash=['','8 4','9 3 2 3','2 4','12 3'][i%5];if(a.some(v=>v.sd>0))svg+=`<polygon points="${a.map(v=>`${X(v.x)},${Y(v.y+v.sd)}`).concat([...a].reverse().map(v=>`${X(v.x)},${Y(v.y-v.sd)}`)).join(' ')}" fill="${color}" opacity=".12"/>`;svg+=`<polyline points="${a.map(v=>`${X(v.x)},${Y(v.y)}`).join(' ')}" fill="none" stroke="${color}" stroke-width="2.5" stroke-dasharray="${dash}"/>`});
+svg+=`</g><text x="${W/2}" y="${H-7}" text-anchor="middle" fill="#b6c3db" font-size="14">环境交互步数（百万）</text><text transform="translate(20,${H/2}) rotate(-90)" text-anchor="middle" fill="#b6c3db" font-size="14">${$('metric').value==='curve'?'原始验证回报':'高斯策略微分熵'}</text></svg>`;
+$('chart').innerHTML=svg;$('legend').innerHTML=active.map((s,i)=>`<span style="color:${COLORS[i%COLORS.length]}">${s.label}</span>`).join('');inspect(+$('inspect').value);
+$('chart').onpointermove=event=>{const box=$('chart').getBoundingClientRect();inspect(Math.max(0,Math.min(end,((event.clientX-box.left)/box.width*W-p.l)/iw*end)))};
+}
+['view','coefficient','metric'].forEach(id=>$(id).onchange=draw);$('until').oninput=draw;$('inspect').oninput=()=>inspect(+$('inspect').value);
+$('reset').onclick=()=>{$('view').value='group';$('metric').value='curve';$('coefficient').value='0';$('until').value=maxStep;$('inspect').value=0;draw()};draw();
+window.ENTROPY_DATA=DATA;
+</script></body></html>

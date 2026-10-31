@@ -107,6 +107,12 @@ def main():
     tracked=subprocess.check_output(['git','ls-files','-z']).decode().split('\0')
     for name in filter(None,tracked):
         file=Path(name)
+        published=(name.startswith(('results/reproduction_4090_20261030/','results/entropy_sweep_20261030/')) and file.name=='checkpoint.pt') or (name.startswith('results/video/') and file.suffix=='.mp4')
+        if published:
+            assert subprocess.check_output(['git','check-attr','filter','--',name],text=True).strip().endswith(': lfs'),name
+            pointer=subprocess.check_output(['git','show',':'+name])
+            assert pointer.startswith(b'version https://git-lfs.github.com/spec/v1\n'),name
+            continue
         assert file.stat().st_size<3*1024*1024,(name,'oversized tracked artifact')
         assert file.suffix not in ['.pt','.pth','.mp4','.pkl','.key','.pem'],name
         if file.suffix not in ['.png','.jpg']:
