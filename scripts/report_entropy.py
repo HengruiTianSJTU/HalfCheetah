@@ -24,7 +24,7 @@ def rows(path):
 
 def csv_write(path, records):
     with path.open('w', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=list(records[0]))
+        writer = csv.DictWriter(f, fieldnames=list(records[0]), lineterminator='\n')
         writer.writeheader(); writer.writerows(records)
 
 

@@ -1,0 +1,252 @@
+{
+  "groups": [
+    {
+      "entropy_coef": 0.0,
+      "n_training_seeds": 5,
+      "mean": 3359.3957424338905,
+      "std": 2067.7086546682317,
+      "median": 2044.2950658969523,
+      "min": 1825.4855223804268,
+      "max": 6552.523893779061,
+      "cv": 0.6155001712213196,
+      "mean_normalized_auc": 2425.416713362446
+    },
+    {
+      "entropy_coef": 0.001,
+      "n_training_seeds": 5,
+      "mean": 3422.1041297927586,
+      "std": 1118.867963935939,
+      "median": 3611.930676289393,
+      "min": 1635.3869355666543,
+      "max": 4559.571023388002,
+      "cv": 0.32695321986116693,
+      "mean_normalized_auc": 2278.047272800427
+    },
+    {
+      "entropy_coef": 0.005,
+      "n_training_seeds": 5,
+      "mean": 2680.286681218625,
+      "std": 1296.3783697932504,
+      "median": 1900.826243011174,
+      "min": 1778.8832991762526,
+      "max": 4759.808962302648,
+      "cv": 0.4836715336748367,
+      "mean_normalized_auc": 1985.9037735970458
+    },
+    {
+      "entropy_coef": 0.01,
+      "n_training_seeds": 5,
+      "mean": 2837.329688883045,
+      "std": 1654.1377725104062,
+      "median": 1844.2905948098182,
+      "min": 1746.4267879103077,
+      "max": 5588.97011085721,
+      "cv": 0.5829910351946379,
+      "mean_normalized_auc": 2070.4324843208124
+    }
+  ],
+  "per_seed": [
+    {
+      "entropy_coef": 0.0,
+      "seed": 42,
+      "final_validation_mean": 6552.523893779061,
+      "normalized_auc": 4277.039407737213,
+      "training_seconds": 2232.3118333700113,
+      "reused_baseline": true,
+      "checkpoint_sha256": "71a242abe0f4387ff4294c49c8c01ba76accdfca7b61fe40ee10d6d4d2749589",
+      "paired_difference_vs_baseline": 0.0
+    },
+    {
+      "entropy_coef": 0.0,
+      "seed": 43,
+      "final_validation_mean": 2011.745724239899,
+      "normalized_auc": 1576.8201720969842,
+      "training_seconds": 2239.4648525658995,
+      "reused_baseline": true,
+      "checkpoint_sha256": "6b2c5a670789ee509e363ada9d5c06d867d1152854e64f4a05950b3ca24908f7",
+      "paired_difference_vs_baseline": 0.0
+    },
+    {
+      "entropy_coef": 0.0,
+      "seed": 44,
+      "final_validation_mean": 2044.2950658969523,
+      "normalized_auc": 1722.5434044552594,
+      "training_seconds": 2255.859690294601,
+      "reused_baseline": true,
+      "checkpoint_sha256": "4e72ad9214932c3af4a1dd9d222b243b434e2f9766e4e482a7a5bbc737e61cf5",
+      "paired_difference_vs_baseline": 0.0
+    },
+    {
+      "entropy_coef": 0.0,
+      "seed": 45,
+      "final_validation_mean": 4362.928505873113,
+      "normalized_auc": 2993.771054749944,
+      "training_seconds": 1836.7075906046666,
+      "reused_baseline": true,
+      "checkpoint_sha256": "1441bd4a113ea2e56f28784fa1dcbe6259fd339ec54bacb2ae59c0dee6bcfd00",
+      "paired_difference_vs_baseline": 0.0
+    },
+    {
+      "entropy_coef": 0.0,
+      "seed": 46,
+      "final_validation_mean": 1825.4855223804268,
+      "normalized_auc": 1556.9095277728297,
+      "training_seconds": 2170.324806471821,
+      "reused_baseline": true,
+      "checkpoint_sha256": "d478bf611c44a813e93ec27aa52cdd0251a44d6b3b2d4a6413fc9a33f77e09c7",
+      "paired_difference_vs_baseline": 0.0
+    },
+    {
+      "entropy_coef": 0.001,
+      "seed": 42,
+      "final_validation_mean": 1635.3869355666543,
+      "normalized_auc": 1474.2071594759016,
+      "training_seconds": 2626.6600698251277,
+      "reused_baseline": false,
+      "checkpoint_sha256": "1d1601b0aea5080f03501fc714284b2440600ff7ac65fbdbc60f922746348e27",
+      "paired_difference_vs_baseline": -4917.136958212406
+    },
+    {
+      "entropy_coef": 0.001,
+      "seed": 43,
+      "final_validation_mean": 3216.0961392648924,
+      "normalized_auc": 2134.6092713837083,
+      "training_seconds": 2156.946988036856,
+      "reused_baseline": false,
+      "checkpoint_sha256": "ba3617aae23facf287d5ab06ad9a66bfc0dfc495605b26838df8f2e9335c20bd",
+      "paired_difference_vs_baseline": 1204.3504150249935
+    },
+    {
+      "entropy_coef": 0.001,
+      "seed": 44,
+      "final_validation_mean": 3611.930676289393,
+      "normalized_auc": 2474.6228609068075,
+      "training_seconds": 2621.560815470759,
+      "reused_baseline": false,
+      "checkpoint_sha256": "d2548f30804d0edfd2abd6145e9e5b24f4bef778f48fea17ce3c69187ec096a3",
+      "paired_difference_vs_baseline": 1567.6356103924406
+    },
+    {
+      "entropy_coef": 0.001,
+      "seed": 45,
+      "final_validation_mean": 4087.535874454849,
+      "normalized_auc": 2673.2479087385836,
+      "training_seconds": 2659.5708862212487,
+      "reused_baseline": false,
+      "checkpoint_sha256": "0165d5d1a34fbf46ddd4be1ea0cf29e9f467f151faca2b675b2d037d6c23454d",
+      "paired_difference_vs_baseline": -275.39263141826405
+    },
+    {
+      "entropy_coef": 0.001,
+      "seed": 46,
+      "final_validation_mean": 4559.571023388002,
+      "normalized_auc": 2633.5491634971336,
+      "training_seconds": 2637.283449674025,
+      "reused_baseline": false,
+      "checkpoint_sha256": "65f4bcc7dcf30f4f6b2432ac7e0c5ecae5f0c8cd2b6bcbc2ac9a35ef5a137486",
+      "paired_difference_vs_baseline": 2734.0855010075747
+    },
+    {
+      "entropy_coef": 0.005,
+      "seed": 42,
+      "final_validation_mean": 3151.1901257215854,
+      "normalized_auc": 2330.619130744864,
+      "training_seconds": 2653.1192818088457,
+      "reused_baseline": false,
+      "checkpoint_sha256": "b07d4d5dbca2956a0468f4f428a358c78e0ab6ece9323bd724cd82ad27b5f8eb",
+      "paired_difference_vs_baseline": -3401.3337680574755
+    },
+    {
+      "entropy_coef": 0.005,
+      "seed": 43,
+      "final_validation_mean": 1810.7247758814651,
+      "normalized_auc": 1652.6266640781566,
+      "training_seconds": 2621.6594936037436,
+      "reused_baseline": false,
+      "checkpoint_sha256": "a1b20865aac614eb49f815b3ef0535333452ea1f8c8f3a5c629f23a831fc8e13",
+      "paired_difference_vs_baseline": -201.02094835843377
+    },
+    {
+      "entropy_coef": 0.005,
+      "seed": 44,
+      "final_validation_mean": 1900.826243011174,
+      "normalized_auc": 1731.814644343623,
+      "training_seconds": 2169.221250338014,
+      "reused_baseline": false,
+      "checkpoint_sha256": "94e6e82f876de31d357dfa45e9407cb564c4a44bb346c3a43f0b96b8258fefee",
+      "paired_difference_vs_baseline": -143.4688228857783
+    },
+    {
+      "entropy_coef": 0.005,
+      "seed": 45,
+      "final_validation_mean": 1778.8832991762526,
+      "normalized_auc": 1464.4345767191446,
+      "training_seconds": 2621.4173443359323,
+      "reused_baseline": false,
+      "checkpoint_sha256": "1b215557fac450de8bd94dd46b168795d226edefee808b3a0020b93e16b755e6",
+      "paired_difference_vs_baseline": -2584.04520669686
+    },
+    {
+      "entropy_coef": 0.005,
+      "seed": 46,
+      "final_validation_mean": 4759.808962302648,
+      "normalized_auc": 2750.023852099441,
+      "training_seconds": 2654.2903641890734,
+      "reused_baseline": false,
+      "checkpoint_sha256": "2abd31512826da61fc90752605280e7bd680d2a87acde0ed1f8c7c19d60c3f2b",
+      "paired_difference_vs_baseline": 2934.323439922221
+    },
+    {
+      "entropy_coef": 0.01,
+      "seed": 42,
+      "final_validation_mean": 1746.4267879103077,
+      "normalized_auc": 1437.6920872019791,
+      "training_seconds": 2625.761614250019,
+      "reused_baseline": false,
+      "checkpoint_sha256": "3a76fc89b54fde7d5f6c3723d6667a3314fa4a3fdfedb199b118f7cce896750b",
+      "paired_difference_vs_baseline": -4806.097105868754
+    },
+    {
+      "entropy_coef": 0.01,
+      "seed": 43,
+      "final_validation_mean": 1844.2905948098182,
+      "normalized_auc": 1571.3872137588423,
+      "training_seconds": 2626.3734573856927,
+      "reused_baseline": false,
+      "checkpoint_sha256": "f6d82e76845ae360f219495346a7fdb2b9fa99f604514a48deca41f1f5d4eddc",
+      "paired_difference_vs_baseline": -167.45512943008066
+    },
+    {
+      "entropy_coef": 0.01,
+      "seed": 44,
+      "final_validation_mean": 5588.97011085721,
+      "normalized_auc": 4299.346360392179,
+      "training_seconds": 2644.680757561233,
+      "reused_baseline": false,
+      "checkpoint_sha256": "b29b90abe40a5b15599abe07f179126c7ff2f7d75b5082fbf6527c0dc5bdc825",
+      "paired_difference_vs_baseline": 3544.6750449602578
+    },
+    {
+      "entropy_coef": 0.01,
+      "seed": 45,
+      "final_validation_mean": 3201.354279759989,
+      "normalized_auc": 1648.7950293488059,
+      "training_seconds": 2176.715221966151,
+      "reused_baseline": false,
+      "checkpoint_sha256": "f85b9f4d314629440697ba894646cecf6b0c4e414990309e81ef45dc41f8d223",
+      "paired_difference_vs_baseline": -1161.574226113124
+    },
+    {
+      "entropy_coef": 0.01,
+      "seed": 46,
+      "final_validation_mean": 1805.6066710778991,
+      "normalized_auc": 1394.941730902255,
+      "training_seconds": 2609.02194951009,
+      "reused_baseline": false,
+      "checkpoint_sha256": "cb8bd9696e3c7ef7d5a539eee5e5f9c3d692e2cad39210eabc4c7d1859323a95",
+      "paired_difference_vs_baseline": -19.878851302527664
+    }
+  ],
+  "scope": "GPU deterministic validation, seeds 10000–10004; no held-out test used for tuning",
+  "std_definition": "sample standard deviation across training-seed means"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checked_at": "2026-10-31T14:42:32.775552+08:00",
+  "original_manifest_files_verified": 160,
+  "raw_group_statistics_recomputed": true,
+  "checkpoints_reloaded": 20,
+  "replay_episodes_per_checkpoint": 1,
+  "replay_seed": 10000,
+  "inference_device": "cuda",
+  "max_return_difference": 0.0,
+  "replay_scope": "One existing validation episode per model; no new held-out test"
+}

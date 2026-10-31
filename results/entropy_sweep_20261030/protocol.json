@@ -1,0 +1,85 @@
+{
+  "entropy_coefficients": [
+    0.0,
+    0.001,
+    0.005,
+    0.01
+  ],
+  "training_seeds": [
+    42,
+    43,
+    44,
+    45,
+    46
+  ],
+  "fixed_config": {
+    "clip_range": 0.2,
+    "device": "cuda",
+    "entropy_coef": 0.0,
+    "environment": "HalfCheetah-v5",
+    "eval_episodes": 5,
+    "eval_interval": 100000,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "learning_rate": 0.0003,
+    "max_grad_norm": 0.5,
+    "minibatch_size": 64,
+    "n_envs": 8,
+    "n_epochs": 10,
+    "n_steps": 256,
+    "seed": 42,
+    "torch_threads": 1,
+    "total_timesteps": 2000000,
+    "value_coef": 0.5,
+    "vec_backend": "sync"
+  },
+  "actual_transitions": 2000896,
+  "validation_seeds": [
+    10000,
+    10001,
+    10002,
+    10003,
+    10004
+  ],
+  "baseline_reuse": [
+    {
+      "seed": 42,
+      "source": "reproduction_20261030/results/hc_lr0.0003_clip0.2_seed42",
+      "destination": "results/entropy_sweep_20261030/hc_entropy0_seed42",
+      "checkpoint_sha256": "71a242abe0f4387ff4294c49c8c01ba76accdfca7b61fe40ee10d6d4d2749589"
+    },
+    {
+      "seed": 43,
+      "source": "reproduction_20261030/results/hc_lr0.0003_clip0.2_seed43",
+      "destination": "results/entropy_sweep_20261030/hc_entropy0_seed43",
+      "checkpoint_sha256": "6b2c5a670789ee509e363ada9d5c06d867d1152854e64f4a05950b3ca24908f7"
+    },
+    {
+      "seed": 44,
+      "source": "reproduction_20261030/results/hc_lr0.0003_clip0.2_seed44",
+      "destination": "results/entropy_sweep_20261030/hc_entropy0_seed44",
+      "checkpoint_sha256": "4e72ad9214932c3af4a1dd9d222b243b434e2f9766e4e482a7a5bbc737e61cf5"
+    },
+    {
+      "seed": 45,
+      "source": "reproduction_20261030/results/hc_lr0.0003_clip0.2_seed45",
+      "destination": "results/entropy_sweep_20261030/hc_entropy0_seed45",
+      "checkpoint_sha256": "1441bd4a113ea2e56f28784fa1dcbe6259fd339ec54bacb2ae59c0dee6bcfd00"
+    },
+    {
+      "seed": 46,
+      "source": "reproduction_20261030/results/hc_lr0.0003_clip0.2_seed46",
+      "destination": "results/entropy_sweep_20261030/hc_entropy0_seed46",
+      "checkpoint_sha256": "d478bf611c44a813e93ec27aa52cdd0251a44d6b3b2d4a6413fc9a33f77e09c7"
+    }
+  ],
+  "primary_metric": "mean final validation return across five training seeds",
+  "secondary_metrics": [
+    "sample SD across seeds",
+    "normalized learning-curve AUC",
+    "paired differences vs baseline"
+  ],
+  "no_test_set_tuning": true,
+  "source_commit": "240f874d3781174282e8b98315714632507dc6b4",
+  "baseline_source_note": "These controls come from the separate CUDA reproduction, not the original committed CPU reference runs. Source campaign paths are provenance identifiers, not required runtime paths."
+}
